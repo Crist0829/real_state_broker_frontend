@@ -10,23 +10,15 @@ function PrincipalLayout({ children }: PropsWithChildren) {
 
   async function getUserAuthenticated() {
     try {
-      const user = await axios.get("/user", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
-
+      const user = await axios.get("/api/user");
       return user.data;
     } catch (error) {
-      console.log(error);
       stateGlobal.logout();
-
       return false;
     }
   }
 
   useEffect(() => {
-    localStorage.getItem("accessToken") &&
       getUserAuthenticated().then((res) => {
         if (!res) return stateGlobal.logout();
         stateGlobal.setAuthenticate(res);
@@ -37,7 +29,6 @@ function PrincipalLayout({ children }: PropsWithChildren) {
   return (
     <div className="relative flex flex-col min-h-screen w-screen">
       <Navbar />
-
       <main className="overflow-hidden">{children}</main>
       <PrincipalBackground />
     </div>

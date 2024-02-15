@@ -1,9 +1,31 @@
 import Sidebar from "@/components/auth/Sidebar";
-import { PropsWithChildren } from "react";
-
+import { PropsWithChildren, useEffect } from "react";
 import PrincipalBackground from "@/components/PrincipalBackground";
+import { useNavigate } from 'react-router-dom';
+import axios from "@/lib/axiosConfig";
+import { useAuthenticate } from '@/store/useAuthenticate';
 
 function AuthLayout({ children }: PropsWithChildren) {
+
+  const navigate = useNavigate()
+  const deleteAuthenticated = useAuthenticate((state) => state.deleteAuthenticate);
+
+  useEffect(() => {
+    const checkAuthenticated = async () => {
+      try{
+        const res = await axios.get('api/user')
+      }catch(e){
+
+        if(e.response.status === 401){
+          deleteAuthenticated()
+          navigate('/')
+        }
+        
+      }
+    }
+    checkAuthenticated()
+  },[])
+
   return (
     <div className="flex flex-col min-h-dvh  relative">
       {/* Sidebar size */}

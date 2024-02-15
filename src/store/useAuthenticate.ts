@@ -15,6 +15,8 @@ interface State {
   isAuthenticated: boolean;
   setAuthenticate: (user: User) => void;
   logout: () => Promise<void>;
+  checkAuth: () => Promise<void>;
+  deleteAuthenticate: () => void;
 }
 
 export const useAuthenticate = create<State>((set) => {
@@ -22,14 +24,37 @@ export const useAuthenticate = create<State>((set) => {
     user: null,
     isAuthenticated: false,
 
-    setAuthenticate: (user: User) =>
+    csrf : async () => {
+      axios.get('/sanctum/csrf-cookie')
+    },
+
+    setAuthenticate: (user: User)  =>
       set(() => ({
         user,
         isAuthenticated: true,
       })),
 
+      deleteAuthenticate: ()  =>
+      set(() => ({
+        user : null,
+        isAuthenticated: false,
+      })),
+
+      checkAuth: async () => {
+        try{
+          await axios.get("/api/user");
+        }catch(e){
+          if (e.response === 401) {
+            set(() => ({
+              user: null,
+              isAuthenticated: false,
+            }));
+          }
+        }
+        
+      },
+
     logout: async () => {
-      localStorage.removeItem("accessToken");
       const res = await axios.post("/logout");
       console.log(res);
       if (res.status === 204) {
