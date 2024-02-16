@@ -22,7 +22,7 @@ import {
 
 function UpdateImagesProperty({ property }: { property: Property }) {
   return (
-    <SheetContent side="top" className="h-screen flex flex-col  container ">
+    <SheetContent side="top" className="h-screen flex flex-col shadow-2xl container ">
       <SheetHeader>
         <SheetTitle>
           Edita las imagenes de tu inmueble {property.name}

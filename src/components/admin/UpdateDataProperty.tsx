@@ -1,7 +1,6 @@
 import {
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
@@ -12,23 +11,69 @@ import { Property } from "@/types";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { useState } from "react";
+import { Select } from "@radix-ui/react-select";
+import {
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import axios from "@/lib/axiosConfig";
+
+import { toast } from "sonner";
+import { useProperties } from "@/store/useProperties";
+import { getMsgErrorResponse } from "@/helpers/getMsgErrorResponse";
 
 function UpdateDataProperty({ property }: { property: Property }) {
+  const [formData, setFormData] = useState<Property>(property);
+  const refreshProperties = useProperties((state) => state.refreshProperties);
 
-  const [formData, setFormData] = useState<Property>(property)
+  function handleChange(e: any) {
+    setFormData((old) => ({
+      ...old,
+      [e.target.name]: e.target.value,
+    }));
+  }
 
+  async function handleSubmit() {
+    try {
+      const res = await axios.put(`/property/${property.id}`, formData);
+      console.log(res);
+      if (res.status === 200) {
+        toast.success(`${formData.name} Actualizado correctamente`);
+        refreshProperties();
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(
+        getMsgErrorResponse(error) || "Ha ocurrido un error inesperado"
+      );
+    }
+  }
 
   return (
-    <SheetContent side="right" className="h-screen container bg-slate-300">
+    <SheetContent side="right" className="h-screen container shadow-2xl w-full sm:max-w-xl">
       <SheetHeader>
-        <SheetTitle><h2 className="text-lg">EDITANDO <strong className="text-xl"> {property.name}</strong> </h2></SheetTitle>
+        <SheetTitle>
+          <h2 className="text-lg">
+            EDITANDO <strong className="text-xl"> {property.name}</strong>{" "}
+          </h2>
+        </SheetTitle>
       </SheetHeader>
       <div className="grid gap-4 py-9">
         <div className="grid  md:grid-cols-4 md:items-center gap-2 md:gap-4">
           <Label htmlFor="name" className="text-left">
             Nombre
           </Label>
-          <Input id="name" value={formData.name} className="col-span-3" />
+          <Input
+            onChange={handleChange}
+            id="name"
+            name="name"
+            value={formData.name}
+            className="col-span-3"
+          />
         </div>
 
         <div className="grid  md:grid-cols-4 md:items-center gap-2 md:gap-4">
@@ -36,9 +81,11 @@ function UpdateDataProperty({ property }: { property: Property }) {
             Description
           </Label>
           <Textarea
+            onChange={handleChange}
             id="description"
+            name="description"
             value={formData.description}
-            className="col-span-3 resize-none" 
+            className="col-span-3 resize-none"
           />
         </div>
 
@@ -47,21 +94,10 @@ function UpdateDataProperty({ property }: { property: Property }) {
             Ubicación
           </Label>
           <Input
+            onChange={handleChange}
+            name="location"
             id="location"
             value={formData.location}
-            className="col-span-3"
-          />
-        </div>
-
-        <div className="grid  md:grid-cols-4 md:items-center gap-2 md:gap-4">
-          <Label htmlFor="location" className="text-left">
-            Tamañao
-          </Label>
-          <Input
-            min={0}
-            name="size"
-            type="number"
-            value={formData.size.toString()}
             className="col-span-3"
           />
         </div>
@@ -73,6 +109,7 @@ function UpdateDataProperty({ property }: { property: Property }) {
               pisos
             </small>
             <Input
+              onChange={handleChange}
               min={0}
               name="floors"
               type="number"
@@ -86,6 +123,7 @@ function UpdateDataProperty({ property }: { property: Property }) {
               livings
             </small>
             <Input
+              onChange={handleChange}
               min={0}
               type="number"
               id="livingrooms"
@@ -99,6 +137,7 @@ function UpdateDataProperty({ property }: { property: Property }) {
               baños
             </small>
             <Input
+              onChange={handleChange}
               name="bathrooms"
               min={0}
               type="number"
@@ -111,6 +150,7 @@ function UpdateDataProperty({ property }: { property: Property }) {
               Cocinas
             </small>
             <Input
+              onChange={handleChange}
               min={0}
               type="number"
               name="kitchens"
@@ -123,6 +163,7 @@ function UpdateDataProperty({ property }: { property: Property }) {
               dormitorios
             </small>
             <Input
+              onChange={handleChange}
               min={0}
               type="number"
               name="bedrooms"
@@ -132,40 +173,78 @@ function UpdateDataProperty({ property }: { property: Property }) {
           </Label>
         </div>
 
-        <div className="flex items-center w-full justify-between ml-auto mr-5 my-2 gap-3">
-
-          <div className="flex items-center justify-center">
-            <label htmlFor="garage" className="mx-4"> Tiene garage </label>
-	          <input
+        <div className="flex items-center w-full justify-between ml-auto  my-2 gap-3">
+          {/* GARAGE */}
+          <div className="flex items-center justify-center gap-3">
+            <label htmlFor="garage" className=" truncate">
+              {" "}
+              Tiene garage{" "}
+            </label>
+            <input
               type="checkbox"
               name="garage"
               id="garage"
               defaultChecked={formData.garage}
-            className="appearance-none w-9 focus:outline-none checked:bg-blue-300 h-5 bg-gray-300 rounded-full before:inline-block before:rounded-full before:bg-blue-500 before:h-4 before:w-4 checked:before:translate-x-full shadow-inner transition-all duration-300 before:ml-0.5"/>
+              className="appearance-none w-9 focus:outline-none checked:bg-blue-300 h-5 bg-gray-300 rounded-full before:inline-block before:rounded-full before:bg-blue-500 before:h-4 before:w-4 checked:before:translate-x-full shadow-inner transition-all duration-300 before:ml-0.5"
+            />
+          </div>
+          {/* STATUS */}
+          <Select
+            id="status"
+            name="status"
+            onValueChange={(value) => {
+              const e = {
+                target: {
+                  name: "status",
+                  value,
+                },
+              };
+              handleChange(e);
+            }}
+            defaultValue={formData.status}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue
+                defaultValue={formData.status}
+                placeholder="Elegir estado"
+              />
+            </SelectTrigger>
+            <SelectContent
+              onChange={(e) => {
+                console.log(e);
+              }}
+            >
+              <SelectGroup>
+                <SelectLabel>Estado</SelectLabel>
+                <SelectItem value="available">Disponible</SelectItem>
+                <SelectItem value="sold">Vendido</SelectItem>
+                <SelectItem value="rented">Rentado</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
 
-        <div className="dark:bg-gray-800">
-          <fieldset>
-            <legend className="text-center text-sm">Estado</legend>
-            <select
-                  className="dark:text-white bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
-                  name="status"
-                  id="status"
-                  defaultValue={formData.status}
-                >
-                  <option value="available">Disponible</option>
-                  <option value="sold">Vendido</option>
-                  <option value="rented">Rentado</option>
-                </select>  
-          </fieldset>      
-        </div>
+        <div className="flex flex-col space-y-1.5">
+          <Label className="text-lg font-bold" htmlFor="size">
+            Metros cuadrados:
+          </Label>
 
-          
+          <Input
+            onChange={handleChange}
+            className="max-w-[250px]"
+            min={0}
+            value={formData.size.toString()}
+            id="size"
+            name="size"
+            type="number"
+          />
         </div>
       </div>
       <SheetFooter>
-        <SheetClose asChild>
-          <Button type="submit">Guardar Cambios</Button>
+        <SheetClose>
+          <Button onClick={handleSubmit} type="submit">
+            Guardar Cambios
+          </Button>
         </SheetClose>
       </SheetFooter>
     </SheetContent>

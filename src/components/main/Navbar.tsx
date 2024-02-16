@@ -44,6 +44,10 @@ const routeListAuth: RouteProps[] = [
     href: "/",
     label: "Home",
   },
+  {
+    href: "/dashboard",
+    label: "Administrar",
+  },
 ];
 
 const links = {

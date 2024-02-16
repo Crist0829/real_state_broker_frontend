@@ -10,26 +10,32 @@ interface State {
   allProperties: ResponseData | null;
   loadingGetProperties: boolean;
   loadingGetAllProperties: boolean;
-  currentPage : number
-  setProperties: () => void;
+  currentPage: number;
+
+  counterRefreshProperties: number;
+
   getProperties: () => Promise<void>;
   getAllProperties: () => Promise<void>;
+  refreshProperties: () => void;
 }
 
 export const useProperties = create<State>((set) => {
-
   return {
-
     properties: [],
     loadingGetProperties: false,
     loadingGetAllProperties: false,
     responseData: null,
     allProperties: null,
+    counterRefreshProperties: 0,
 
-    setProperties: () => {},
+    refreshProperties: () => {
+      set((state) => ({
+        counterRefreshProperties: state.counterRefreshProperties + 1,
+      }));
+    },
 
     getProperties: async () => {
-      set(() => ({ loadingGetProperties: true }));  
+      set(() => ({ loadingGetProperties: true }));
       try {
         const res = await axios.get("/properties");
         set(() => ({
@@ -58,7 +64,7 @@ export const useProperties = create<State>((set) => {
         set(() => ({
           loadingGetAllProperties: false,
           allProperties: res.data.properties,
-          currentPage : res.data.properties.current_page
+          currentPage: res.data.properties.current_page,
         }));
       } catch (error) {
         set(() => ({ loadingGetAllProperties: false }));

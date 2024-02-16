@@ -19,4 +19,15 @@ export const createPropertySchema = z.object({
     invalid_type_error:
       "El estado debe ser 'disponible', 'vendido' o 'rentado'",
   }),
+  size: z.string().min(1, "Ingrese el tamaño en metros cuadrados"),
+});
+
+export const createPriceSchema = z.object({
+  name: z.string().min(1, "El nombre no puede estar vacío"),
+  description: z
+    .string()
+    .min(1, "La descripción no puede estar vacía")
+    .max(250, "La descripción no puede tener más de 250 caracteres"),
+  price: z.string().min(1, "El precio es requerido"),
+  type: z.enum(["sale", "rent"]),
 });

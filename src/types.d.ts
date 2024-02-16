@@ -5,7 +5,7 @@ export interface Property {
   location: string;
   created_at: string;
   updated_at: string;
-  size : number;
+  size: number;
   floors: number;
   user_id: number;
   bedrooms: number;
@@ -14,9 +14,9 @@ export interface Property {
   kitchens: number;
   garage: boolean;
   status: "available" | "sold" | "rented";
-  images : Image[];
-  prices : Price[];
-  user : UserProperty[];
+  images: Image[];
+  prices: Price[];
+  user: UserProperty[];
 }
 
 export interface ResponseData {
@@ -24,7 +24,7 @@ export interface ResponseData {
   data: Property[];
   first_page_url: string;
   from: number;
-  links : ResponseDataLink[] | null
+  links: ResponseDataLink[] | null;
   last_page: number;
   last_page_url: string;
   next_page_url: string;
@@ -34,40 +34,46 @@ export interface ResponseData {
   total: number;
 }
 
-export interface ResponseDataLink{
-  url : string | null
-  label : string 
-  active : boolean
+export interface ResponseDataLink {
+  url: string | null;
+  label: string;
+  active: boolean;
 }
 
 export interface Image {
-  id : number
-  description : string;
-  name : string;
-  url : string;
-  property_id : number
-  created_at : string
-  updated_at : string
+  id: number;
+  description: string;
+  name: string;
+  url: string;
+  property_id: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Price {
-  id : number
-  name : string;
-  description : string;
-  type : "sale" | "rent"
-  price : number;
-  property_id : number;
-  created_at : string
-  updated_at : string
+  id: number;
+  name: string;
+  description: string;
+  type: "sale" | "rent";
+  price: number;
+  property_id: number;
+  created_at: string;
+  updated_at: string;
+}
+export interface CreatePrice {
+  name: string;
+  description: string;
+  type: "sale" | "rent";
+  price: number;
+  property_id: number;
 }
 
-
 export interface UserProperty {
-  id : number;
-  name : string;
-  email : string; 
-  created_at : string
-  updated_at : string
+  id: number;
+  name: string;
+  email: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface User {
