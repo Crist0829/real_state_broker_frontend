@@ -1,21 +1,35 @@
-import axios from "@/lib/axiosConfig";
 import { Navbar } from "@/components/Navbar";
-import { useAuthenticate } from "@/store/useAuthenticate";
 import { PropsWithChildren, useEffect } from "react";
 import PrincipalBackground from "@/components/PrincipalBackground";
-
+import { useProperties } from "@/store/useProperties";
+import { useAuthenticate } from "@/store/useAuthenticate";
+import axios from "@/lib/axiosConfig";
 
 function PrincipalLayout({ children }: PropsWithChildren) {
   const stateGlobal = useAuthenticate();
 
+  /* Trae todos las propiedades */
+  const getAllProperties = useProperties((state) => state.getAllProperties);
+  useEffect(() => {
+    getAllProperties();
+    console.log("Get all propierties");
+  }, []);
+
+  /* Verifica si el token es valido */
   async function getUserAuthenticated() {
+    if (!localStorage.getItem("accessToken")) {
+      console.log("logout");
+      stateGlobal.logout();
+      return;
+    }
     try {
       const user = await axios.get("/user", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
-
+      stateGlobal.setAuthenticate(user.data);
+      console.log(user.data);
       return user.data;
     } catch (error) {
       console.log(error);
@@ -26,11 +40,7 @@ function PrincipalLayout({ children }: PropsWithChildren) {
   }
 
   useEffect(() => {
-    localStorage.getItem("accessToken") &&
-      getUserAuthenticated().then((res) => {
-        if (!res) return stateGlobal.logout();
-        stateGlobal.setAuthenticate(res);
-      });
+    // getUserAuthenticated();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

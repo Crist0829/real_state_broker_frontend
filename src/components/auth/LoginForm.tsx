@@ -17,7 +17,6 @@ import { useAuthenticate } from "@/store/useAuthenticate";
 import { Link, useNavigate } from "react-router-dom";
 import PrincipalLayout from "@/layouts/PrincipalLayout";
 
-
 interface User {
   email: string;
   password: string;
@@ -59,13 +58,11 @@ const LoginForm: React.FC = () => {
         setAuthenticate(userAuthenticated.data);
         localStorage.setItem("accessToken", response.data.token);
         navigate("/dashboard");
-        console.log(userAuthenticated);
       }
       setUser({
         email: "",
         password: "",
       });
-
     } catch (error) {
       console.log(error);
 

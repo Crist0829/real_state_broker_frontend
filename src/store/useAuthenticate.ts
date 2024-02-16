@@ -31,7 +31,7 @@ export const useAuthenticate = create<State>((set) => {
     logout: async () => {
       localStorage.removeItem("accessToken");
       const res = await axios.post("/logout");
-      console.log(res);
+
       if (res.status === 204) {
         set(() => ({
           user: null,

@@ -17,6 +17,7 @@ import { LogOut, Menu } from "lucide-react";
 import { ModeToggle } from "./mode-toggle";
 import { Link } from "react-router-dom";
 import { useAuthenticate } from "@/store/useAuthenticate";
+import Logo from "./Logo";
 
 interface RouteProps {
   href: string;
@@ -24,23 +25,31 @@ interface RouteProps {
 }
 
 const routeList: RouteProps[] = [
-  /* {
+  {
     href: "/register",
     label: "Registrarse",
   },
   {
-    href: "#testimonials",
-    label: "Testimonials",
+    href: "/login",
+    label: "Iniciar sesión",
   },
   {
-    href: "#pricing",
-    label: "Pricing",
+    href: "/",
+    label: "Home",
   },
-  {
-    href: "#faq",
-    label: "FAQ",
-  }, */
 ];
+
+const routeListAuth: RouteProps[] = [
+  {
+    href: "/",
+    label: "Home",
+  },
+];
+
+const links = {
+  auth: routeListAuth,
+  comun: routeList,
+};
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -52,24 +61,26 @@ export const Navbar = () => {
       <NavigationMenu className="mx-auto">
         <NavigationMenuList className="container h-14 px-4 w-screen flex justify-between ">
           <NavigationMenuItem className="font-bold flex">
-            <Link to="/" className="ml-2 font-bold text-xl flex">
-              Súper Inmobiliaria⚰
+            <Link to="/" className="ml-2 font-bold  text-xl flex">
+              <Logo />
             </Link>
           </NavigationMenuItem>
 
           {/* desktop */}
-          <nav className="hidden md:flex  flex-grow   justify-center gap-2">
-            {routeList.map((route: RouteProps, i) => (
-              <Link
-                to={route.href}
-                key={i}
-                className={`text-[17px] ${buttonVariants({
-                  variant: "ghost",
-                })}`}
-              >
-                {route.label}
-              </Link>
-            ))}
+          <nav className="hidden md:flex  flex-grow   justify-end gap-2">
+            {links[isAuthenticated ? "auth" : "comun"].map(
+              (route: RouteProps, i) => (
+                <Link
+                  to={route.href}
+                  key={i}
+                  className={`text-[17px] ${buttonVariants({
+                    variant: "ghost",
+                  })}`}
+                >
+                  {route.label}
+                </Link>
+              )
+            )}
           </nav>
 
           {/* mobile */}
@@ -83,33 +94,34 @@ export const Navbar = () => {
                 ></Menu>
               </SheetTrigger>
 
-              <SheetContent side={"left"}>
+              <SheetContent className="flex flex-col" side={"left"}>
                 <SheetHeader>
-                  <SheetTitle className="font-bold text-xl">
-                    {/*  <Link to="/" className="ml-2 font-bold text-center">
-                      Súper Inmobiliaria🏘
-                    </Link> */}
+                  <SheetTitle className="font-bold text-xl flex justify-center">
+                    <Logo />
                   </SheetTitle>
                 </SheetHeader>
-                <nav className="flex flex-col justify-center items-center gap-2 mt-4">
-                  {routeList.map(({ href, label }: RouteProps) => (
-                    <Link
-                      key={label}
-                      to={href}
-                      onClick={() => setIsOpen(false)}
-                      className={buttonVariants({ variant: "ghost" })}
-                    >
-                      {label}
-                    </Link>
-                  ))}
+                <nav className="flex flex-col  items-center gap-2 mt-4 flex-grow  flex-shrink-0">
+                  {links[isAuthenticated ? "auth" : "comun"].map(
+                    ({ href, label }: RouteProps) => (
+                      <Link
+                        key={label}
+                        to={href}
+                        onClick={() => setIsOpen(false)}
+                        className={buttonVariants({ variant: "ghost" })}
+                      >
+                        {label}
+                      </Link>
+                    )
+                  )}
                 </nav>
                 {isAuthenticated && (
                   <Button
                     onClick={logout}
-                    className={`p-2 animate-fade-in`}
+                    className={`p-2 animate-fade-in w-8/12 mx-auto  flex gap-5 flex-shrink`}
                     variant="outline"
                   >
                     {" "}
+                    Cerrar sesión
                     <LogOut />{" "}
                   </Button>
                 )}

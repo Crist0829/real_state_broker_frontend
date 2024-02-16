@@ -9,6 +9,7 @@ import DashboardPage from "./pages/admin/DashboardPage";
 import { Toaster } from "./components/ui/sonner";
 import Create from "./pages/admin/properties/Create";
 import Show from "./pages/admin/properties/Show";
+import PropertyPage from "./pages/PropertyPage";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginForm />,
+  },
+  {
+    path: "/property/:id",
+    element: <PropertyPage />,
   },
   {
     path: "/",

@@ -1,7 +1,5 @@
-import axios from "@/lib/axiosConfig";
-import { Property } from "@/types";
 import { Bed, ParkingCircle, ParkingCircleOff, ShowerHead } from "lucide-react";
-import { useEffect, useState } from "react";
+
 import {
   Carousel,
   CarouselContent,
@@ -10,6 +8,8 @@ import {
   CarouselPrevious,
 } from "./ui/carousel";
 import { Card } from "./ui/card";
+import { Link } from "react-router-dom";
+import { useProperties } from "@/store/useProperties";
 
 const imagesDefault = [
   "https://images.unsplash.com/photo-1613545325278-f24b0cae1224?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
@@ -17,16 +17,8 @@ const imagesDefault = [
 ];
 
 function GridAllProperties() {
-  const [allProperties, setAllProperties] = useState<Array<Property>>([]);
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    setLoading(true);
-    axios
-      .get("/all-properties")
-      .then((res) => setAllProperties(res.data.properties.data))
-      .catch((e) => console.log(e))
-      .finally(() => setLoading(false));
-  }, []);
+  const allProperties = useProperties((state) => state.allProperties);
+  const loading = useProperties((state) => state.loadingGetAllProperties);
 
   return (
     <article className="container my-10 animate-fade-in" id="all-properties">
@@ -57,7 +49,16 @@ function GridAllProperties() {
               </Carousel>
 
               {/* Datos */}
-              <div className="mt-2">
+              <div className="mt-2 group">
+                <div>
+                  <Link
+                    to={`/property/${property.id}`}
+                    className="text-xl md:text-2xl border-t-black font-bold group-hover:underline opacity-70 hover:opacity-100 transition"
+                  >
+                    {property.name}
+                  </Link>
+                </div>
+
                 <dl>
                   <div>
                     <dt className="sr-only">Precio</dt>
