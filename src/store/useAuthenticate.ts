@@ -1,15 +1,12 @@
 import axios from "@/lib/axiosConfig";
 import { create } from "zustand";
-import { User, State } from "@/types"; 
-
-
-
+import { User, State } from "@/types";
 
 export const useAuthenticate = create<State>((set) => {
   return {
-    
     user: null,
     isAuthenticated: false,
+    loading: true,
 
     csrf: async () => {
       axios.get("/sanctum/csrf-cookie");
@@ -43,6 +40,10 @@ export const useAuthenticate = create<State>((set) => {
             isAuthenticated: false,
           }));
         }
+      } finally {
+        set(() => ({
+          loading: false,
+        }));
       }
     },
 

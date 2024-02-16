@@ -1,13 +1,13 @@
 import { Start, StartBg, StartRedBg } from '@/icons/Icons'
 import axios from '@/lib/axiosConfig'
-import { useAuthenticate } from '@/store/useAuthenticate'
+
 import { PropertyCalificationType, User } from '@/types'
 import { useEffect, useState } from 'react'
 import  Rating  from 'react-rating'
-import { useFetcher } from 'react-router-dom'
+
 import { toast } from 'sonner'
 
-const PropertyCalification = ({califications, propertyId, setCalification} : {califications : PropertyCalificationType[], propertyId : string, setCalification : any}) => {
+const PropertyCalification = ({califications, propertyId, setCalification} : {califications : PropertyCalificationType[], propertyId : number, setCalification : any}) => {
 
     const [generalCalification, setGeneralCalification] = useState<number>(0)
     const [myCalification, setMyCalification] = useState<PropertyCalificationType | null >(null)

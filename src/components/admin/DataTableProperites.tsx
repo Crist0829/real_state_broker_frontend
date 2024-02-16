@@ -10,11 +10,17 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, Loader, PlusCircle } from "lucide-react";
+import {
+  ArrowUpDown,
+  ArrowUpRightFromSquare,
+  ChevronDown,
+  Loader,
+  PlusCircle,
+} from "lucide-react";
 
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -41,6 +47,8 @@ import axios from "@/lib/axiosConfig";
 import Pagination from "../home/Pagination";
 import { useProperties } from "@/store/useProperties";
 import { statusPropertiesToShow } from "../constants/statusProperties";
+import ButtonDelete from "./ButtonDelete";
+import { Link } from "react-router-dom";
 
 export type Payment = {
   id: string;
@@ -126,32 +134,47 @@ export const columns: ColumnDef<Property>[] = [
           <DropdownMenuContent className="flex flex-col items-start">
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>{" "}
             {/* actualizar información */}
+            <Link
+              className={`${buttonVariants({
+                variant: "ghost",
+              })} w-full flex items-center gap-3`}
+              to={`/property/${property.id}`}
+            >
+              Visitar <ArrowUpRightFromSquare />
+            </Link>
             <Sheet>
-              <SheetTrigger>
-                <div className="text-sm font-bold p-4 hover:cursor-pointer w-40 hover:bg-slate-300 dark:text-white dark:hover:bg-slate-800 text-start">
-                  Editar información
-                </div>
+              <SheetTrigger
+                className={`${buttonVariants({
+                  variant: "ghost",
+                })} w-full`}
+              >
+                Editar información
               </SheetTrigger>
               <UpdateDataProperty property={property} />
             </Sheet>
             {/* Acutalizar precios */}
             <Sheet>
-              <SheetTrigger>
-                <div className="text-sm font-bold p-4 hover:cursor-pointer w-40 hover:bg-slate-300 dark:text-white dark:hover:bg-slate-800 text-start">
-                  Añadir precios
-                </div>
+              <SheetTrigger
+                className={`${buttonVariants({
+                  variant: "ghost",
+                })} w-full`}
+              >
+                Editar precios
               </SheetTrigger>
               <UpdatePriceProperty property={property} />
             </Sheet>
             {/* Actualizar imagenes */}
             <Sheet>
-              <SheetTrigger>
-                <div className="text-sm font-bold p-4 hover:cursor-pointer w-40 hover:bg-slate-300 dark:text-white dark:hover:bg-slate-800 text-start">
-                  Añadir imágenes
-                </div>
+              <SheetTrigger
+                className={`${buttonVariants({
+                  variant: "ghost",
+                })} w-full`}
+              >
+                Editar imágenes
               </SheetTrigger>
               <UpdateImagesProperty property={property} />
             </Sheet>
+            <ButtonDelete property={property} />
             {/*  <DropdownMenuItem>Añadir imagenes</DropdownMenuItem>
             <DropdownMenuItem>Añadir precios</DropdownMenuItem> */}
           </DropdownMenuContent>

@@ -27,13 +27,12 @@ import { toast } from "sonner";
 import axios from "@/lib/axiosConfig";
 import { useProperties } from "@/store/useProperties";
 import { TablePricesProperty } from "./TablePricesPropery";
+import { getProperty } from "@/services/properties";
 
 function UpdatePriceProperty({ property }: { property: Property }) {
   const refresh = useProperties((state) => state.refreshProperties);
   const [prices, setPrices] = useState(property.prices);
-
   const [openForm, setOpenForm] = useState(false);
-
   const [newPrice, setNewPrice] = useState({
     name: "",
     description: "",
@@ -49,19 +48,22 @@ function UpdatePriceProperty({ property }: { property: Property }) {
   }
 
   async function handleSubmit() {
-    console.log(newPrice);
     try {
       const newPriceValidated = createPriceSchema.parse(newPrice);
       const res = await axios.post(
         `/property/addPrice/${property.id}`,
         newPriceValidated
       );
+
       if (res.status === 200) {
+        const currenrProperty = await getProperty(property.id);
+        console.log(currenrProperty);
+        setPrices(currenrProperty.data.property.prices); // actualiza la lista de precios
         toast.success("Precio añadido correctamente");
         refresh();
-        setPrices((old) => old.concat(newPriceValidated));
       }
     } catch (error) {
+      console.log(error)
       toast.error(
         getMsgErrorResponse(error) || "Ha ocurrido un error inesperado"
       );
@@ -84,7 +86,11 @@ function UpdatePriceProperty({ property }: { property: Property }) {
         </SheetDescription>
       </SheetHeader>
       {prices.length > 0 && (
-        <TablePricesProperty property={property} prices={prices} />
+        <TablePricesProperty
+          property={property}
+          prices={prices}
+          setPrices={setPrices}
+        />
       )}
 
       <Button
