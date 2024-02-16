@@ -2,7 +2,7 @@ import { Home, LayoutDashboard, LogOut, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button, buttonVariants } from "../ui/button";
 import { useAuthenticate } from "@/store/useAuthenticate";
-import { ModeToggle } from "../mode-toggle";
+import { ModeToggle } from "../main/mode-toggle";
 
 function Sidebar() {
   const user = useAuthenticate((state) => state.user);

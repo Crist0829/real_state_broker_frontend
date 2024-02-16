@@ -1,15 +1,9 @@
-import { Navbar } from "@/components/Navbar";
+import { Navbar } from "@/components/main/Navbar";
 import { PropsWithChildren } from "react";
-import PrincipalBackground from "@/components/PrincipalBackground";
-import { useProperties } from "@/store/useProperties";
-import { useEffect } from "react";
-function PrincipalLayout({ children }: PropsWithChildren) {
-  const getAllProperties = useProperties((state) => state.getAllProperties);
+import PrincipalBackground from "@/components/main/PrincipalBackground";
 
-  useEffect(() => {
-    getAllProperties();
-  }, [getAllProperties]);
-  
+function PrincipalLayout({ children }: PropsWithChildren) {
+
   return (
     <div className="relative flex flex-col min-h-screen w-screen">
       <Navbar />

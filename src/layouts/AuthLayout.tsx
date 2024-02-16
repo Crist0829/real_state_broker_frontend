@@ -1,10 +1,9 @@
 import Sidebar from "@/components/auth/Sidebar";
 import { PropsWithChildren, useEffect } from "react";
-import PrincipalBackground from "@/components/PrincipalBackground";
+import PrincipalBackground from "@/components/main/PrincipalBackground";
 import { useNavigate } from "react-router-dom";
 import axios from "@/lib/axiosConfig";
 import { useAuthenticate } from "@/store/useAuthenticate";
-import { useProperties } from "@/store/useProperties";
 import { toast } from "sonner";
 
 function AuthLayout({ children }: PropsWithChildren) {
@@ -14,14 +13,12 @@ function AuthLayout({ children }: PropsWithChildren) {
   );
   const setAuthenticated = useAuthenticate((state) => state.setAuthenticate);
 
-  const getProperties = useProperties((state) => state.getProperties);
-
   useEffect(() => {
     const checkAuthenticated = async () => {
       try {
         const res = await axios.get("api/user");
         setAuthenticated(res.data);
-        getProperties();
+        //getProperties();
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         if (e.response.status === 401) {

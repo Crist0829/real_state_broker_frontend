@@ -11,22 +11,24 @@ import { Label } from "../ui/label";
 import { Property } from "@/types";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
+import { useState } from "react";
 
 function UpdateDataProperty({ property }: { property: Property }) {
+
+  const [formData, setFormData] = useState<Property>(property)
+
+
   return (
-    <SheetContent side="right" className="h-screen container">
+    <SheetContent side="right" className="h-screen container bg-slate-300">
       <SheetHeader>
-        <SheetTitle>Edita {property.name}</SheetTitle>
-        <SheetDescription>
-          Make changes to your profile here. Click save when you're done.
-        </SheetDescription>
+        <SheetTitle><h2 className="text-lg">EDITANDO <strong className="text-xl"> {property.name}</strong> </h2></SheetTitle>
       </SheetHeader>
-      <div className="grid gap-4 py-4">
+      <div className="grid gap-4 py-9">
         <div className="grid  md:grid-cols-4 md:items-center gap-2 md:gap-4">
           <Label htmlFor="name" className="text-left">
             Nombre
           </Label>
-          <Input id="name" placeholder={property.name} className="col-span-3" />
+          <Input id="name" value={formData.name} className="col-span-3" />
         </div>
 
         <div className="grid  md:grid-cols-4 md:items-center gap-2 md:gap-4">
@@ -35,7 +37,7 @@ function UpdateDataProperty({ property }: { property: Property }) {
           </Label>
           <Textarea
             id="description"
-            placeholder={property.description}
+            value={formData.description}
             className="col-span-3 resize-none" 
           />
         </div>
@@ -46,7 +48,20 @@ function UpdateDataProperty({ property }: { property: Property }) {
           </Label>
           <Input
             id="location"
-            placeholder={property.location}
+            value={formData.location}
+            className="col-span-3"
+          />
+        </div>
+
+        <div className="grid  md:grid-cols-4 md:items-center gap-2 md:gap-4">
+          <Label htmlFor="location" className="text-left">
+            Tamañao
+          </Label>
+          <Input
+            min={0}
+            name="size"
+            type="number"
+            value={formData.size.toString()}
             className="col-span-3"
           />
         </div>
@@ -62,7 +77,7 @@ function UpdateDataProperty({ property }: { property: Property }) {
               name="floors"
               type="number"
               id="floors"
-              placeholder={property.floors.toString()}
+              value={formData.floors.toString()}
             />
           </Label>
 
@@ -75,7 +90,7 @@ function UpdateDataProperty({ property }: { property: Property }) {
               type="number"
               id="livingrooms"
               name="livingrooms"
-              placeholder={property.livingrooms.toString()}
+              value={formData.livingrooms.toString()}
             />
           </Label>
 
@@ -88,7 +103,7 @@ function UpdateDataProperty({ property }: { property: Property }) {
               min={0}
               type="number"
               id="bathrooms"
-              placeholder={property.bathrooms.toString()}
+              value={formData.bathrooms.toString()}
             />
           </Label>
           <Label htmlFor="kitchens">
@@ -100,7 +115,7 @@ function UpdateDataProperty({ property }: { property: Property }) {
               type="number"
               name="kitchens"
               id="kitchens"
-              placeholder={property.kitchens.toString()}
+              value={formData.kitchens.toString()}
             />
           </Label>
           <Label htmlFor="bedrooms">
@@ -112,45 +127,45 @@ function UpdateDataProperty({ property }: { property: Property }) {
               type="number"
               name="bedrooms"
               id="bedrooms"
-              placeholder={property.bedrooms.toString()}
+              value={formData.bedrooms.toString()}
             />
           </Label>
         </div>
 
         <div className="flex items-center w-full justify-between ml-auto mr-5 my-2 gap-3">
-          <Label
-            className="text-lg font-bold flex items-center gap-2"
-            htmlFor="garage"
-          >
-            Tiene garage
-            <Input
+
+          <div className="flex items-center justify-center">
+            <label htmlFor="garage" className="mx-4"> Tiene garage </label>
+	          <input
               type="checkbox"
-              checked={property.garage}
-              className="w-4 "
               name="garage"
               id="garage"
-            />
-          </Label>
+              defaultChecked={formData.garage}
+            className="appearance-none w-9 focus:outline-none checked:bg-blue-300 h-5 bg-gray-300 rounded-full before:inline-block before:rounded-full before:bg-blue-500 before:h-4 before:w-4 checked:before:translate-x-full shadow-inner transition-all duration-300 before:ml-0.5"/>
+        </div>
 
+        <div className="dark:bg-gray-800">
           <fieldset>
-            <legend>Estado</legend>
+            <legend className="text-center text-sm">Estado</legend>
             <select
-              className="text-black"
-              defaultValue={property.status}
-              defaultChecked
-              name="status"
-              id="status"
-            >
-              <option value="available">Disponible</option>
-              <option value="sold">Vendido</option>
-              <option value="rented">Rentado</option>
-            </select>
-          </fieldset>
+                  className="dark:text-white bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
+                  name="status"
+                  id="status"
+                  defaultValue={formData.status}
+                >
+                  <option value="available">Disponible</option>
+                  <option value="sold">Vendido</option>
+                  <option value="rented">Rentado</option>
+                </select>  
+          </fieldset>      
+        </div>
+
+          
         </div>
       </div>
       <SheetFooter>
         <SheetClose asChild>
-          <Button type="submit">Save changes</Button>
+          <Button type="submit">Guardar Cambios</Button>
         </SheetClose>
       </SheetFooter>
     </SheetContent>

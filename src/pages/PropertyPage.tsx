@@ -21,6 +21,8 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import Autoplay from "embla-carousel-autoplay";
+import axios from "@/lib/axiosConfig";
+import CarouselProperty from "@/components/home/CarouselProperty";
 
 const imagesDefault = [
   "https://images.unsplash.com/photo-1613545325278-f24b0cae1224?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
@@ -28,31 +30,25 @@ const imagesDefault = [
 ];
 
 function PropertyPage() {
+
   const { id } = useParams<{ id: string }>(); // Asegúrate de especificar que id es de tipo string
 
-  const { allProperties, loadingGetAllProperties } = useProperties();
 
   const [currentProperty, setCurrentProperty] = useState<Property | null>(null);
   const [notFound, setNotFound] = useState(false);
-  const [loading, setloading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const fetchProperty = async () => {
+    const res = await axios.get("/property/"+ id);
+    setLoading(false)
+    setCurrentProperty(res.data.property)
+    
+  }
+ 
   useEffect(() => {
-    console.log(allProperties);
-
-    if (!id || isNaN(parseInt(id))) navigate("/");
-
-    if (allProperties !== null && id !== undefined) {
-      const found = allProperties.find((p) => p.id === parseInt(id));
-      if (found) {
-        setCurrentProperty(found);
-        return setloading(false);
-      }
-      setNotFound(true);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadingGetAllProperties]);
+    fetchProperty()
+  }, []);
 
   if (notFound) {
     return (
@@ -89,31 +85,9 @@ function PropertyPage() {
         {/* Si ya lo encontro */}
         {currentProperty && (
           <section className="flex flex-col md:flex-row gap-5">
-            <Carousel
-              plugins={[
-                Autoplay({
-                  delay: 5000,
-                }),
-              ]}
-              className="w-full    relative flex justify-center "
-            >
-              <CarouselContent>
-                {imagesDefault.map((src, index) => (
-                  <CarouselItem key={index}>
-                    <div className="p-1 ">
-                      <img
-                        alt=""
-                        src={src}
-                        className="h-full w-full rounded-md object-cover"
-                      />
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-
-              <CarouselPrevious className="left-0 " />
-              <CarouselNext className="right-0    " />
-            </Carousel>
+            {
+                currentProperty.images.length > 0 && <CarouselProperty images={currentProperty.images}/>
+            }
             {/* end Slider */}
             <div className="md:w-[400px] flex flex-col gap-3 ">
               <header className="flex flex-col gap-1">

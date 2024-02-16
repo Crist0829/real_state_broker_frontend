@@ -1,4 +1,4 @@
-import { logo, logo_blue } from "./constants/logos";
+import { logo, logo_blue } from "../constants/logos";
 function Logo() {
   return (
     <>

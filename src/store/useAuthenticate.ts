@@ -1,26 +1,13 @@
 import axios from "@/lib/axiosConfig";
 import { create } from "zustand";
+import { User, State } from "@/types"; 
 
-interface User {
-  created_at: string;
-  email: string;
-  id: number;
-  name: string;
-  updated_at: string;
-  email_verefied_at: string | null;
-}
 
-interface State {
-  user: User | null;
-  isAuthenticated: boolean;
-  setAuthenticate: (user: User) => void;
-  logout: () => Promise<void>;
-  checkAuth: () => Promise<void>;
-  deleteAuthenticate: () => void;
-}
+
 
 export const useAuthenticate = create<State>((set) => {
   return {
+    
     user: null,
     isAuthenticated: false,
 

@@ -12,12 +12,12 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-import { Button, buttonVariants } from "./ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import { LogOut, Menu } from "lucide-react";
 import { ModeToggle } from "./mode-toggle";
 import { Link } from "react-router-dom";
 import { useAuthenticate } from "@/store/useAuthenticate";
-import Logo from "./Logo";
+import Logo from "../home/Logo";
 
 interface RouteProps {
   href: string;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -31,11 +31,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Property } from "@/types";
+import { Property, ResponseDataLink } from "@/types";
 import { useProperties } from "@/store/useProperties";
 import UpdateDataProperty from "./UpdateDataProperty";
 import UpdateImagesProperty from "./UpdateImagesProperty";
 import UpdatePriceProperty from "./UpdatePriceProperty";
+import axios from "@/lib/axiosConfig";
+import { set } from "zod";
+import Pagination from "../home/Pagination";
+import { link } from "fs";
 
 export type Payment = {
   id: string;
@@ -72,22 +76,14 @@ export const columns: ColumnDef<Property>[] = [
     accessorKey: "description",
     header: () => <div className="">Descripción</div>,
     cell: ({ row }) => {
-      return (
-        <div className="font-medium truncate max-w-[300px] md:max-w-[600px] md:text-pretty">
-          {row.getValue("description")}
-        </div>
-      );
+      return <div className="font-medium truncate max-w-[300px] md:max-w-[600px] md:text-pretty">{row.getValue("description")}</div>;
     },
   },
   {
     accessorKey: "location",
     header: () => <div className="">Ubicación</div>,
     cell: ({ row }) => {
-      return (
-        <div className="font-medium truncate max-w-[200px] md:max-w-[400px] md:text-pretty">
-          {row.getValue("location")}
-        </div>
-      );
+      return <div className="font-medium">{row.getValue("location")}</div>;
     },
   },
   {
@@ -95,7 +91,6 @@ export const columns: ColumnDef<Property>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const property = row.original;
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -103,26 +98,26 @@ export const columns: ColumnDef<Property>[] = [
               <PlusCircle className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className=" flex flex-col items-start">
+          <DropdownMenuContent className="flex flex-col items-start">
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>{" "}
             {/* actualizar información */}
             <Sheet>
               <SheetTrigger>
-                <Button variant="ghost">Editar información</Button>
+                <div className="text-sm font-bold p-4 hover:cursor-pointer w-40 hover:bg-slate-300 dark:text-white dark:hover:bg-slate-800 text-start">Editar información</div>
               </SheetTrigger>
               <UpdateDataProperty property={property} />
             </Sheet>
             {/* Acutalizar precios */}
             <Sheet>
               <SheetTrigger>
-                <Button variant="ghost">Añadir precios</Button>
+              <div className="text-sm font-bold p-4 hover:cursor-pointer w-40 hover:bg-slate-300 dark:text-white dark:hover:bg-slate-800 text-start">Añadir precios</div>
               </SheetTrigger>
               <UpdatePriceProperty property={property} />
             </Sheet>
             {/* Actualizar imagenes */}
             <Sheet>
               <SheetTrigger>
-                <Button variant="ghost">Añadir imagenes</Button>
+              <div className="text-sm font-bold p-4 hover:cursor-pointer w-40 hover:bg-slate-300 dark:text-white dark:hover:bg-slate-800 text-start">Añadir imágenes</div>
               </SheetTrigger>
               <UpdateImagesProperty property={property} />
             </Sheet>
@@ -136,11 +131,24 @@ export const columns: ColumnDef<Property>[] = [
 ];
 
 export default function DataTableProperties() {
+
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [page, setPage] = useState(1)
+  const [links, setLinks] = useState<ResponseDataLink[]>([])
+  const [properties, setProperties] = useState<Property[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const properties = useProperties((state) => state.properties);
-  const loading = useProperties((state) => state.loadingGetProperties);
+  const getProperties = async () => {
+    const res = await axios.get('/properties?page=' + page)
+    setLoading(false)
+    setLinks(res.data.properties.links)
+    setProperties(res.data.properties.data)
+  }
+
+  useEffect(() => {
+    getProperties()
+  },[page])
 
   const table = useReactTable({
     data: properties,
@@ -240,31 +248,14 @@ export default function DataTableProperties() {
           </Table>
         </div>
       ) : (
-        <div className=" flex p-10 items-center justify-center">
+        <div className=" flex p-10 items-center justify-center" >
           <span>
             <Loader className="animate-spin-counter-clockwise animate-iteration-count-infinite" />
           </span>
         </div>
       )}
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
+        <Pagination setPage={(e) => setPage(e)} links={links}/>
       </div>
     </div>
   );

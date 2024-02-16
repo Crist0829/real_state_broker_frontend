@@ -5,6 +5,7 @@ export interface Property {
   location: string;
   created_at: string;
   updated_at: string;
+  size : number;
   floors: number;
   user_id: number;
   bedrooms: number;
@@ -13,6 +14,9 @@ export interface Property {
   kitchens: number;
   garage: boolean;
   status: "available" | "sold" | "rented";
+  images : Image[];
+  prices : Price[];
+  user : UserProperty[];
 }
 
 export interface ResponseData {
@@ -20,6 +24,7 @@ export interface ResponseData {
   data: Property[];
   first_page_url: string;
   from: number;
+  links : ResponseDataLink[] | null
   last_page: number;
   last_page_url: string;
   next_page_url: string;
@@ -27,4 +32,58 @@ export interface ResponseData {
   prev_page_url: string | null;
   to: number;
   total: number;
+}
+
+export interface ResponseDataLink{
+  url : string | null
+  label : string 
+  active : boolean
+}
+
+export interface Image {
+  id : number
+  description : string;
+  name : string;
+  url : string;
+  property_id : number
+  created_at : string
+  updated_at : string
+}
+
+export interface Price {
+  id : number
+  name : string;
+  description : string;
+  type : "sale" | "rent"
+  price : number;
+  property_id : number;
+  created_at : string
+  updated_at : string
+}
+
+
+export interface UserProperty {
+  id : number;
+  name : string;
+  email : string; 
+  created_at : string
+  updated_at : string
+}
+
+export interface User {
+  created_at: string;
+  email: string;
+  id: number;
+  name: string;
+  updated_at: string;
+  email_verefied_at: string | null;
+}
+
+export interface State {
+  user: User | null;
+  isAuthenticated: boolean;
+  setAuthenticate: (user: User) => void;
+  logout: () => Promise<void>;
+  checkAuth: () => Promise<void>;
+  deleteAuthenticate: () => void;
 }
