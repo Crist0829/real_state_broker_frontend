@@ -10,7 +10,17 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { getMsgErrorResponse } from "@/helpers/getMsgErrorResponse";
 import AuthLayout from "@/layouts/AuthLayout";
 import axios from "@/lib/axiosConfig";
 import { useAuthenticate } from "@/store/useAuthenticate";
@@ -29,6 +39,7 @@ const INITIAL_VALUE = {
   bathrooms: "",
   kitchens: "",
   bedrooms: "",
+  size: "",
   garage: false,
   status: "available",
 };
@@ -40,9 +51,9 @@ function Create() {
   const formRef = useRef(null);
 
   async function handleSubmit() {
-    console.log(data);
     try {
       const dataValidated = createPropertySchema.parse(data);
+      console.log(dataValidated);
       const res = await axios.post("/properties/store", dataValidated);
       console.log(res);
       if (res.status === 200) {
@@ -52,14 +63,10 @@ function Create() {
         formRef.current.reset();
       }
     } catch (error) {
-      if (error instanceof ZodError) {
-        const msg = error.issues[0].message;
-        toast.error(msg);
-      }
-      if (error instanceof AxiosError) {
-        const msg = Object.values(error.response?.data.errores)[0][0];
-        toast.error(msg);
-      }
+      console.log(error);
+      toast.error(
+        getMsgErrorResponse(error) || "Ha ocurrido un error inesperado"
+      );
     }
   }
 
@@ -77,9 +84,8 @@ function Create() {
 
   return (
     <AuthLayout>
-      <h1 className="">Añade un inmueble</h1>
       <section className="w-full ">
-        <Card className="  w-full lg:max-w-[500px]  border-none bg-transparent">
+        <Card className="  w-full lg:max-w-[700px] mx-auto  border-none bg-transparent">
           <CardHeader>
             <CardTitle>Añadir nuevo inmueble</CardTitle>
             <CardDescription>
@@ -207,19 +213,22 @@ function Create() {
                   </Label>
                 </div>
 
-                <div className="flex items-center ml-auto mr-5 my-2 gap-3">
-                  <Label className="text-lg font-bold" htmlFor="garage">
-                    Tiene garage
+                <div className="flex md:items-center ml-auto mr-5 my-2 flex-col md:flex-row  md:gap-20">
+                  <Label
+                    className="text-lg font-bold flex gap-2 items-center"
+                    htmlFor="garage"
+                  >
+                    <span className="text-nowrap">Tiene garage</span>
+                    <Input
+                      type="checkbox"
+                      className="w-4 "
+                      onChange={handleChange}
+                      name="garage"
+                      id="garage"
+                    />
                   </Label>
-                  <Input
-                    type="checkbox"
-                    className="w-4 "
-                    onChange={handleChange}
-                    name="garage"
-                    id="garage"
-                  />
 
-                  <fieldset>
+                  {/* <fieldset>
                     <legend>Estado</legend>
                     <select
                       className="text-black"
@@ -233,7 +242,51 @@ function Create() {
                       <option value="sold">Vendido</option>
                       <option value="rented">Rentado</option>
                     </select>
-                  </fieldset>
+                  </fieldset> */}
+
+                  <Select
+                    id="status"
+                    name="status"
+                    onValueChange={(value) => {
+                      const e = {
+                        target: {
+                          name: "status",
+                          value,
+                        },
+                      };
+                      handleChange(e);
+                    }}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Elegir estado" />
+                    </SelectTrigger>
+                    <SelectContent
+                      onChange={(e) => {
+                        console.log(e);
+                      }}
+                    >
+                      <SelectGroup>
+                        <SelectLabel>Estado</SelectLabel>
+                        <SelectItem value="available">Disponible</SelectItem>
+                        <SelectItem value="sold">Vendido</SelectItem>
+                        <SelectItem value="rented">Rentado</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex flex-col space-y-1.5">
+                  <Label className="text-lg font-bold" htmlFor="size">
+                    Metros cuadrados:
+                  </Label>
+
+                  <Input
+                    className="max-w-[250px]"
+                    onChange={handleChange}
+                    min={0}
+                    id="size"
+                    name="size"
+                    type="number"
+                  />
                 </div>
               </div>
             </form>

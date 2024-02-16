@@ -1,38 +1,19 @@
-import { Button } from "@/components/ui/button";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 import PrincipalLayout from "@/layouts/PrincipalLayout";
-import { useProperties } from "@/store/useProperties";
+
 import { Property } from "@/types";
-import {
-  Bed,
-  Loader2Icon,
-  ParkingCircle,
-  ParkingCircleOff,
-  ShoppingCart,
-  ShowerHead,
-} from "lucide-react";
+import { Loader2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import Autoplay from "embla-carousel-autoplay";
-import axios from "@/lib/axiosConfig";
 import CarouselProperty from "@/components/home/CarouselProperty";
+import { getProperty } from "@/services/properties";
+import { getMsgErrorResponse } from "@/helpers/getMsgErrorResponse";
+import { toast } from "sonner";
 
-const imagesDefault = [
-  "https://images.unsplash.com/photo-1613545325278-f24b0cae1224?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
-  "https://img.freepik.com/free-photo/stylish-scandinavian-living-room-with-design-mint-sofa-furnitures-mock-up-poster-map-plants-eleg_1258-152143.jpg?w=1800&t=st=1708012763~exp=1708013363~hmac=8e1085078b6d6bf8427dcf1429b40595100ffa2e3ba5734a8f0906ced0cc2986",
-];
+import SectionInfoProperty from "@/components/property/SectionInfoProperty";
 
 function PropertyPage() {
-
   const { id } = useParams<{ id: string }>(); // Asegúrate de especificar que id es de tipo string
-
 
   const [currentProperty, setCurrentProperty] = useState<Property | null>(null);
   const [notFound, setNotFound] = useState(false);
@@ -40,14 +21,27 @@ function PropertyPage() {
   const navigate = useNavigate();
 
   const fetchProperty = async () => {
-    const res = await axios.get("/property/"+ id);
-    setLoading(false)
-    setCurrentProperty(res.data.property)
-    
-  }
- 
+    try {
+      if (!id || isNaN(parseInt(id))) return navigate("/");
+      const res = await getProperty(parseInt(id));
+
+      if (res.status === 200) {
+        setCurrentProperty(res.data.property);
+      } else {
+        setNotFound(true);
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.log(error);
+      toast.error(getMsgErrorResponse(error));
+      error.response.status === 404 && setNotFound(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    fetchProperty()
+    fetchProperty();
   }, []);
 
   if (notFound) {
@@ -71,7 +65,7 @@ function PropertyPage() {
       </PrincipalLayout>
     );
   }
-
+ 
   return (
     <PrincipalLayout>
       <main className="container animate-fade-in">
@@ -85,65 +79,12 @@ function PropertyPage() {
         {/* Si ya lo encontro */}
         {currentProperty && (
           <section className="flex flex-col md:flex-row gap-5">
-            {
-                currentProperty.images.length > 0 && <CarouselProperty images={currentProperty.images}/>
-            }
-            {/* end Slider */}
-            <div className="md:w-[400px] flex flex-col gap-3 ">
-              <header className="flex flex-col gap-1">
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
-                  {currentProperty.name}
-                </h2>
-                <p className="text-xl font-light flex flex-col ">
-                  <small className="text-sm opacity-55">Descripción</small>
-                  {currentProperty.description}
-                </p>
-              </header>
+            {currentProperty.images.length > 0 && (
+              <CarouselProperty images={currentProperty.images} />
+            )}
 
-              <div className="mt-6 flex flex-col gap-5">
-                <h3 className="text-2xl font-semibold leading-4">Detalles</h3>
-                <div className="flex gap-3 items-center ">
-                  {currentProperty.garage ? (
-                    <>
-                      <ParkingCircle width={35} height={35} />
-                      <div className="">
-                        <p className="opacity-90">con garage</p>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <ParkingCircleOff width={35} height={35} />
-                      <div className="">
-                        <p className="opacity-90">Sin garage</p>
-                      </div>
-                    </>
-                  )}
-                </div>
-                <div className="flex gap-3 items-center">
-                  <ShowerHead width={35} height={35} />
-                  <div className=" flex gap-3">
-                    <p className="font-medium">{currentProperty.bathrooms}</p>
-                    <p className="opacity-90">Baños</p>
-                  </div>
-                </div>
-                <div className="flex gap-3 items-center">
-                  <Bed width={35} height={35} />
-                  <div className=" flex gap-3">
-                    <p className="font-medium">{currentProperty.bedrooms}</p>
-                    <p className="opacity-90">Dormitorio</p>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <small className="text-sm opacity-55">Precio</small>
-                <p className="font-mono text-2xl">$80.402</p>
-              </div>
-              <Button className="flex items-center gap-3">
-                Adquirir
-                <ShoppingCart />
-              </Button>
-            </div>
+            {/* INFORMACIÓN PROPERTY */}
+            <SectionInfoProperty currentProperty={currentProperty} />
           </section>
         )}
       </main>

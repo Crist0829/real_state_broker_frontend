@@ -22,9 +22,13 @@ import {
 import axios from "@/lib/axiosConfig";
 
 import { toast } from "sonner";
+import { useProperties } from "@/store/useProperties";
+import { getMsgErrorResponse } from "@/helpers/getMsgErrorResponse";
 
 function UpdateDataProperty({ property }: { property: Property }) {
   const [formData, setFormData] = useState<Property>(property);
+
+  const refresh = useProperties((state) => state.refreshProperties);
 
   function handleChange(e: any) {
     setFormData((old) => ({
@@ -38,9 +42,11 @@ function UpdateDataProperty({ property }: { property: Property }) {
       const res = await axios.put(`/property/${property.id}`, formData);
       console.log(res);
       if (res.status === 200) {
+        refresh();
         toast.success(`${formData.name} Actualizado correctamente`);
       }
     } catch (error) {
+      getMsgErrorResponse(error);
       console.log(error);
       console.log(error.response.data.message);
     }

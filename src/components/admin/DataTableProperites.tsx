@@ -10,11 +10,17 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, Loader, PlusCircle } from "lucide-react";
+import {
+  ArrowUpDown,
+  ArrowUpRightFromSquare,
+  ChevronDown,
+  Loader,
+  PlusCircle,
+} from "lucide-react";
 
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -32,14 +38,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Property, ResponseDataLink } from "@/types";
-import { useProperties } from "@/store/useProperties";
+
 import UpdateDataProperty from "./UpdateDataProperty";
 import UpdateImagesProperty from "./UpdateImagesProperty";
 import UpdatePriceProperty from "./UpdatePriceProperty";
 import axios from "@/lib/axiosConfig";
-import { set } from "zod";
+
 import Pagination from "../home/Pagination";
-import { link } from "fs";
+import { useProperties } from "@/store/useProperties";
+import { statusPropertiesToShow } from "../constants/statusProperties";
+import ButtonDelete from "./ButtonDelete";
+import { Link } from "react-router-dom";
 
 export type Payment = {
   id: string;
@@ -54,7 +63,10 @@ export const columns: ColumnDef<Property>[] = [
     accessorKey: "status",
     header: "Estado",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">
+        {statusPropertiesToShow[row.getValue("status")] ||
+          row.getValue("status")}
+      </div>
     ),
   },
   {
@@ -76,7 +88,11 @@ export const columns: ColumnDef<Property>[] = [
     accessorKey: "description",
     header: () => <div className="">Descripción</div>,
     cell: ({ row }) => {
-      return <div className="font-medium truncate max-w-[300px] md:max-w-[600px] md:text-pretty">{row.getValue("description")}</div>;
+      return (
+        <div className="font-medium truncate max-w-[300px] md:max-w-[600px] md:text-pretty">
+          {row.getValue("description")}
+        </div>
+      );
     },
   },
   {
@@ -84,6 +100,23 @@ export const columns: ColumnDef<Property>[] = [
     header: () => <div className="">Ubicación</div>,
     cell: ({ row }) => {
       return <div className="font-medium">{row.getValue("location")}</div>;
+    },
+  },
+  /* {
+    accessorKey: "price",
+    header: () => <div className="">Precio</div>,
+    cell: ({ row }) => {
+      return <div className="font-medium">{row.getValue("price")}</div>;
+    },
+  }, */
+
+  {
+    accessorKey: "size",
+    header: () => <div className="">Metros cuadrados</div>,
+    cell: ({ row }) => {
+      return (
+        <div className="font-medium text-center">{row.getValue("size")}m²</div>
+      );
     },
   },
   {
@@ -101,26 +134,47 @@ export const columns: ColumnDef<Property>[] = [
           <DropdownMenuContent className="flex flex-col items-start">
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>{" "}
             {/* actualizar información */}
+            <Link
+              className={`${buttonVariants({
+                variant: "ghost",
+              })} w-full flex items-center gap-3`}
+              to={`/property/${property.id}`}
+            >
+              Visitar <ArrowUpRightFromSquare />
+            </Link>
             <Sheet>
-              <SheetTrigger>
-                <div className="text-sm font-bold p-4 hover:cursor-pointer w-40 hover:bg-slate-300 dark:text-white dark:hover:bg-slate-800 text-start">Editar información</div>
+              <SheetTrigger
+                className={`${buttonVariants({
+                  variant: "ghost",
+                })} w-full`}
+              >
+                Editar información
               </SheetTrigger>
               <UpdateDataProperty property={property} />
             </Sheet>
             {/* Acutalizar precios */}
             <Sheet>
-              <SheetTrigger>
-              <div className="text-sm font-bold p-4 hover:cursor-pointer w-40 hover:bg-slate-300 dark:text-white dark:hover:bg-slate-800 text-start">Añadir precios</div>
+              <SheetTrigger
+                className={`${buttonVariants({
+                  variant: "ghost",
+                })} w-full`}
+              >
+                Editar precios
               </SheetTrigger>
               <UpdatePriceProperty property={property} />
             </Sheet>
             {/* Actualizar imagenes */}
             <Sheet>
-              <SheetTrigger>
-              <div className="text-sm font-bold p-4 hover:cursor-pointer w-40 hover:bg-slate-300 dark:text-white dark:hover:bg-slate-800 text-start">Añadir imágenes</div>
+              <SheetTrigger
+                className={`${buttonVariants({
+                  variant: "ghost",
+                })} w-full`}
+              >
+                Editar imágenes
               </SheetTrigger>
               <UpdateImagesProperty property={property} />
             </Sheet>
+            <ButtonDelete property={property} />
             {/*  <DropdownMenuItem>Añadir imagenes</DropdownMenuItem>
             <DropdownMenuItem>Añadir precios</DropdownMenuItem> */}
           </DropdownMenuContent>
@@ -131,24 +185,25 @@ export const columns: ColumnDef<Property>[] = [
 ];
 
 export default function DataTableProperties() {
+  const refresh = useProperties((state) => state.counterRefreshProperties);
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [page, setPage] = useState(1)
-  const [links, setLinks] = useState<ResponseDataLink[]>([])
-  const [properties, setProperties] = useState<Property[]>([])
-  const [loading, setLoading] = useState(true)
+  const [page, setPage] = useState(1);
+  const [links, setLinks] = useState<ResponseDataLink[]>([]);
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const getProperties = async () => {
-    const res = await axios.get('/properties?page=' + page)
-    setLoading(false)
-    setLinks(res.data.properties.links)
-    setProperties(res.data.properties.data)
-  }
+    const res = await axios.get("/properties?page=" + page);
+    setLoading(false);
+    setLinks(res.data.properties.links);
+    setProperties(res.data.properties.data);
+  };
 
   useEffect(() => {
-    getProperties()
-  },[page])
+    getProperties();
+  }, [page, refresh]);
 
   const table = useReactTable({
     data: properties,
@@ -180,6 +235,7 @@ export default function DataTableProperties() {
               .getAllColumns()
               .filter((column) => column.getCanHide())
               .map((column) => {
+                // column.getFacetedRowModel().rows[0].getValue("price") -> si tiene precio
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
@@ -248,14 +304,14 @@ export default function DataTableProperties() {
           </Table>
         </div>
       ) : (
-        <div className=" flex p-10 items-center justify-center" >
+        <div className=" flex p-10 items-center justify-center">
           <span>
             <Loader className="animate-spin-counter-clockwise animate-iteration-count-infinite" />
           </span>
         </div>
       )}
       <div className="flex items-center justify-end space-x-2 py-4">
-        <Pagination setPage={(e) => setPage(e)} links={links}/>
+        <Pagination setPage={(e) => setPage(e)} links={links} />
       </div>
     </div>
   );

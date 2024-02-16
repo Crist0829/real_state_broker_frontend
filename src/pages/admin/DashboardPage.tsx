@@ -1,16 +1,9 @@
 import DataTableProperties from "@/components/admin/DataTableProperites";
 import AuthLayout from "@/layouts/AuthLayout";
 import { useAuthenticate } from "@/store/useAuthenticate";
-import { useProperties } from "@/store/useProperties";
-import { useEffect } from "react";
 
 function DashboardPage() {
   const user = useAuthenticate((state) => state.user);
-  const getProperties = useProperties((state) => state.getProperties);
-
-  useEffect(() => {
-    getProperties();
-  },[])
 
   return (
     <AuthLayout>
