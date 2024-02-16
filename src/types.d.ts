@@ -16,6 +16,7 @@ export interface Property {
   status: "available" | "sold" | "rented";
   images : Image[];
   prices : Price[];
+  califications : PropertyCalificationType[]
   user : UserProperty[];
 }
 
@@ -68,6 +69,16 @@ export interface UserProperty {
   email : string; 
   created_at : string
   updated_at : string
+}
+
+export interface PropertyCalificationType{
+  id: number
+  user_id : number
+  property_id : number
+  calification : number
+  created_at : string
+  updated_at : string
+
 }
 
 export interface User {
