@@ -55,16 +55,14 @@ const RegisterUser: React.FC = () => {
     console.log(user);
 
     try {
+      const csrf = () => axios.get('/sanctum/csrf-cookie')
+      await csrf()
       const userValidated = createUserSchema.parse(user);
       const response = await axios.post("/register", userValidated);
-
-  
-      if (response.status === 200) {
-        const userAuthenticated = await axios.get("/user");
+      if (response.status === 204) {
+        const userAuthenticated = await axios.get("/api/user");
         setAuthenticate(userAuthenticated.data);
-        localStorage.setItem("accessToken", response.data.token);
         navigate("/dashboard");
-        console.log(userAuthenticated);
       }
 
       setUser({

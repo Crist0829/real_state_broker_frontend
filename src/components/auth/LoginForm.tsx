@@ -46,17 +46,17 @@ const LoginForm: React.FC = () => {
   };
 
   const handleSubmit = async (e: FormEvent) => {
+    
     e.preventDefault();
-    console.log(user);
-
     try {
+      const csrf = () => axios.get('/sanctum/csrf-cookie')
+      await csrf()
       const userValidated = loginUserSchema.parse(user);
       const response = await axios.post("/login", userValidated);
 
-      if (response.status === 200) {
-        const userAuthenticated = await axios.get("/user");
+      if (response.status === 204) {
+        const userAuthenticated = await axios.get("/api/user");
         setAuthenticate(userAuthenticated.data);
-        localStorage.setItem("accessToken", response.data.token);
         navigate("/dashboard");
       }
       setUser({
@@ -64,10 +64,8 @@ const LoginForm: React.FC = () => {
         password: "",
       });
     } catch (error) {
-      console.log(error);
 
       if (error instanceof AxiosError) {
-        console.log(error.response?.data);
         alert(
           error.response?.data.message ||
             "Ha ocurrido un error al registrar al usuario"
@@ -77,8 +75,6 @@ const LoginForm: React.FC = () => {
         const msg = error.issues[0].message;
         return alert(msg);
       }
-
-      // console.error("Error al registrar usuario", error.response.data);
     }
   };
 
