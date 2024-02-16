@@ -12,8 +12,9 @@ function GridAllProperties() {
   const currentPage = useProperties((state) => state.currentPage);
   const loading = useProperties((state) => state.loadingGetAllProperties); */
   const [allProperties, setAllProperties] = useState<ResponseData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true)
+  const [calification, setCalification] = useState<boolean>(false)
+  const [page, setPage] = useState(1)
   const [filters, setFilters] = useState({
     bedrooms: "",
     bathrooms: "",
@@ -26,17 +27,17 @@ function GridAllProperties() {
   });
 
   const fetchAllProperties = async () => {
-    const res = await axios.get("/all-properties?page=" + page, {
-      params: filters,
-    });
-    setLoading(false);
-    setAllProperties(res.data.properties);
-  };
-
+    const res = await axios.get("/all-properties?page=" + page, {params : filters});
+    setCalification(false)
+    setLoading(false)
+    setAllProperties(res.data.properties)
+    
+  }
+ 
   useEffect(() => {
-    fetchAllProperties();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, filters]);
+    fetchAllProperties()
+    console.log(allProperties)
+  }, [page, filters, calification]);
 
   return (
     <article className="container my-10 animate-fade-in" id="all-properties">
@@ -54,8 +55,8 @@ function GridAllProperties() {
       {/* Si ya termino de cargar */}
       {!loading && allProperties !== null && (
         <section className=" grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 relative animate-fade-in">
-          {allProperties.data.map((property: Property) => (
-            <CardProperty property={property} />
+          {allProperties.data.map((property : Property) => (
+            <CardProperty key={property.id} property={property} setCalification={(e) => setCalification(e)} />
           ))}
         </section>
       )}

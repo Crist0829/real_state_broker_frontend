@@ -14,9 +14,10 @@ export interface Property {
   kitchens: number;
   garage: boolean;
   status: "available" | "sold" | "rented";
-  images: Image[];
-  prices: Price[];
-  user: UserProperty[];
+  images : Image[];
+  prices : Price[];
+  califications : PropertyCalificationType[]
+  user : UserProperty[];
 }
 
 export interface ResponseData {
@@ -74,6 +75,16 @@ export interface UserProperty {
   email: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface PropertyCalificationType{
+  id: number
+  user_id : number
+  property_id : number
+  calification : number
+  created_at : string
+  updated_at : string
+
 }
 
 export interface User {

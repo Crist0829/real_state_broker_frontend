@@ -1,5 +1,4 @@
 import {
-  SheetClose,
   SheetContent,
   SheetFooter,
   SheetHeader,
@@ -23,12 +22,9 @@ import {
 import axios from "@/lib/axiosConfig";
 
 import { toast } from "sonner";
-import { useProperties } from "@/store/useProperties";
-import { getMsgErrorResponse } from "@/helpers/getMsgErrorResponse";
 
 function UpdateDataProperty({ property }: { property: Property }) {
   const [formData, setFormData] = useState<Property>(property);
-  const refreshProperties = useProperties((state) => state.refreshProperties);
 
   function handleChange(e: any) {
     setFormData((old) => ({
@@ -43,18 +39,15 @@ function UpdateDataProperty({ property }: { property: Property }) {
       console.log(res);
       if (res.status === 200) {
         toast.success(`${formData.name} Actualizado correctamente`);
-        refreshProperties();
       }
     } catch (error) {
       console.log(error);
-      toast.error(
-        getMsgErrorResponse(error) || "Ha ocurrido un error inesperado"
-      );
+      console.log(error.response.data.message);
     }
   }
 
   return (
-    <SheetContent side="right" className="h-screen container shadow-2xl w-full sm:max-w-xl">
+    <SheetContent side="right" className="h-screen container shadow-2xl">
       <SheetHeader>
         <SheetTitle>
           <h2 className="text-lg">
@@ -199,7 +192,7 @@ function UpdateDataProperty({ property }: { property: Property }) {
                   value,
                 },
               };
-              handleChange(e);
+              console.log(e);
             }}
             defaultValue={formData.status}
           >
@@ -241,11 +234,9 @@ function UpdateDataProperty({ property }: { property: Property }) {
         </div>
       </div>
       <SheetFooter>
-        <SheetClose>
-          <Button onClick={handleSubmit} type="submit">
-            Guardar Cambios
-          </Button>
-        </SheetClose>
+        <Button onClick={handleSubmit} type="submit">
+          Guardar Cambios
+        </Button>
       </SheetFooter>
     </SheetContent>
   );
