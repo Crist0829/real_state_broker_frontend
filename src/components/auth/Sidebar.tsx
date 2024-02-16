@@ -1,4 +1,4 @@
-import { Home, LayoutDashboard, LogOut, Plus } from "lucide-react";
+import { Home, LayoutDashboard, LogOut, Plus, User2Icon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button, buttonVariants } from "../ui/button";
 import { useAuthenticate } from "@/store/useAuthenticate";
@@ -65,6 +65,20 @@ function Sidebar() {
                 <Home />
                 <span className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded  px-2 py-1.5 text-xs font-medium text-white group-hover:visible">
                   Ver inmuebles
+                </span>
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                to="/profile"
+                className={`${buttonVariants({
+                  variant: "ghost",
+                })} group relative`}
+              >
+                <User2Icon />
+                <span className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded  px-2 py-1.5 text-xs font-medium text-white group-hover:visible">
+                  Administrar cuenta
                 </span>
               </Link>
             </li>

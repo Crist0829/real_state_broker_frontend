@@ -12,6 +12,7 @@ import Show from "./pages/admin/properties/Show";
 import PropertyPage from "./pages/PropertyPage";
 import { useAuthenticate } from "./store/useAuthenticate";
 import { useEffect } from "react";
+import Profile from "./pages/admin/Profile";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "/property/:id",
         element: <Show />,
+      },
+      {
+        path: "/profile",
+        element: <Profile/>,
       },
     ],
   },
