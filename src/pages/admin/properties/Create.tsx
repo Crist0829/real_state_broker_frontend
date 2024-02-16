@@ -17,6 +17,7 @@ import { useAuthenticate } from "@/store/useAuthenticate";
 import { createPropertySchema } from "@/validations/properties";
 import { AxiosError } from "axios";
 import { useRef, useState } from "react";
+import { toast } from "sonner";
 import { ZodError } from "zod";
 
 const INITIAL_VALUE = {
@@ -44,16 +45,20 @@ function Create() {
       const dataValidated = createPropertySchema.parse(data);
       const res = await axios.post("/properties/store", dataValidated);
       console.log(res);
-      
+      if (res.status === 200) {
+        toast.success("Inmueble añadido correctamente");
+        setData(INITIAL_VALUE);
+
+        formRef.current.reset();
+      }
     } catch (error) {
-      console.log(error);
       if (error instanceof ZodError) {
         const msg = error.issues[0].message;
-        alert(msg);
+        toast.error(msg);
       }
       if (error instanceof AxiosError) {
         const msg = Object.values(error.response?.data.errores)[0][0];
-        alert(msg);
+        toast.error(msg);
       }
     }
   }
@@ -118,6 +123,7 @@ function Create() {
                     className="resize-none"
                     name="description"
                     id="description"
+                    maxLength={200}
                   />
                   {/* end input to description */}
                 </div>
@@ -147,7 +153,6 @@ function Create() {
                       name="floors"
                       type="number"
                       id="floors"
-                      placeholder="2"
                     />
                   </Label>
 
@@ -161,7 +166,6 @@ function Create() {
                       type="number"
                       id="livingrooms"
                       name="livingrooms"
-                      placeholder="2"
                     />
                   </Label>
 
@@ -175,7 +179,6 @@ function Create() {
                       min={0}
                       type="number"
                       id="bathrooms"
-                      placeholder="2"
                     />
                   </Label>
                   <Label htmlFor="kitchens">
@@ -188,7 +191,6 @@ function Create() {
                       type="number"
                       name="kitchens"
                       id="kitchens"
-                      placeholder="2"
                     />
                   </Label>
                   <Label htmlFor="bedrooms">
@@ -201,7 +203,6 @@ function Create() {
                       type="number"
                       name="bedrooms"
                       id="bedrooms"
-                      placeholder="2"
                     />
                   </Label>
                 </div>

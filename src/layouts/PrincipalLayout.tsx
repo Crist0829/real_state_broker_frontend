@@ -1,31 +1,15 @@
-import axios from "@/lib/axiosConfig";
 import { Navbar } from "@/components/Navbar";
-import { useAuthenticate } from "@/store/useAuthenticate";
-import { PropsWithChildren, useEffect } from "react";
+import { PropsWithChildren } from "react";
 import PrincipalBackground from "@/components/PrincipalBackground";
-
-
+import { useProperties } from "@/store/useProperties";
+import { useEffect } from "react";
 function PrincipalLayout({ children }: PropsWithChildren) {
-  const stateGlobal = useAuthenticate();
-
-  async function getUserAuthenticated() {
-    try {
-      const user = await axios.get("/api/user");
-      return user.data;
-    } catch (error) {
-      stateGlobal.logout();
-      return false;
-    }
-  }
+  const getAllProperties = useProperties((state) => state.getAllProperties);
 
   useEffect(() => {
-      getUserAuthenticated().then((res) => {
-        if (!res) return stateGlobal.logout();
-        stateGlobal.setAuthenticate(res);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+    getAllProperties();
+  }, [getAllProperties]);
+  
   return (
     <div className="relative flex flex-col min-h-screen w-screen">
       <Navbar />

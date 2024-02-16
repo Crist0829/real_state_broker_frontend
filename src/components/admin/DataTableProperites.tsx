@@ -72,14 +72,22 @@ export const columns: ColumnDef<Property>[] = [
     accessorKey: "description",
     header: () => <div className="">Descripción</div>,
     cell: ({ row }) => {
-      return <div className="font-medium truncate max-w-[300px] md:max-w-[600px] md:text-pretty">{row.getValue("description")}</div>;
+      return (
+        <div className="font-medium truncate max-w-[300px] md:max-w-[600px] md:text-pretty">
+          {row.getValue("description")}
+        </div>
+      );
     },
   },
   {
     accessorKey: "location",
     header: () => <div className="">Ubicación</div>,
     cell: ({ row }) => {
-      return <div className="font-medium">{row.getValue("location")}</div>;
+      return (
+        <div className="font-medium truncate max-w-[200px] md:max-w-[400px] md:text-pretty">
+          {row.getValue("location")}
+        </div>
+      );
     },
   },
   {
@@ -87,7 +95,7 @@ export const columns: ColumnDef<Property>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const property = row.original;
-      console.log(property);
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -232,7 +240,7 @@ export default function DataTableProperties() {
           </Table>
         </div>
       ) : (
-        <div className=" flex p-10 items-center justify-center" >
+        <div className=" flex p-10 items-center justify-center">
           <span>
             <Loader className="animate-spin-counter-clockwise animate-iteration-count-infinite" />
           </span>

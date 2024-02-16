@@ -16,7 +16,7 @@ import { AxiosError } from "axios";
 import { useAuthenticate } from "@/store/useAuthenticate";
 import { Link, useNavigate } from "react-router-dom";
 import PrincipalLayout from "@/layouts/PrincipalLayout";
-
+import { toast } from "sonner";
 
 interface User {
   email: string;
@@ -47,16 +47,18 @@ const LoginForm: React.FC = () => {
   };
 
   const handleSubmit = async (e: FormEvent) => {
-    
     e.preventDefault();
     try {
-      const csrf = () => axios.get('/sanctum/csrf-cookie')
-      await csrf()
+      const csrf = () => axios.get("/sanctum/csrf-cookie");
+      await csrf();
       const userValidated = loginUserSchema.parse(user);
       const response = await axios.post("/login", userValidated);
 
-      if (response.status === 204) {
+      console.log(response);
+
+      if (response.status === 204 || response.status === 200) {
         const userAuthenticated = await axios.get("/api/user");
+        toast.success("Inicio de sesión correcto");
         setAuthenticate(userAuthenticated.data);
         navigate("/dashboard");
       }
@@ -64,9 +66,7 @@ const LoginForm: React.FC = () => {
         email: "",
         password: "",
       });
-
     } catch (error) {
-
       if (error instanceof AxiosError) {
         alert(
           error.response?.data.message ||

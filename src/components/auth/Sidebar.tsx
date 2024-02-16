@@ -1,4 +1,4 @@
-import { LayoutDashboard, LogOut, Plus } from "lucide-react";
+import { Home, LayoutDashboard, LogOut, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button, buttonVariants } from "../ui/button";
 import { useAuthenticate } from "@/store/useAuthenticate";
@@ -52,6 +52,19 @@ function Sidebar() {
                 <LayoutDashboard />
                 <span className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded  px-2 py-1.5 text-xs font-medium text-white group-hover:visible">
                   Inmuebles
+                </span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/#all-properties"
+                className={`${buttonVariants({
+                  variant: "ghost",
+                })} group relative`}
+              >
+                <Home />
+                <span className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded  px-2 py-1.5 text-xs font-medium text-white group-hover:visible">
+                  Ver inmuebles
                 </span>
               </Link>
             </li>

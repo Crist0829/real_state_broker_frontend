@@ -30,7 +30,7 @@ const RegisterUser: React.FC = () => {
 
   const setAuthenticate = useAuthenticate((state) => state.setAuthenticate);
   const isAuthenticated = useAuthenticate((state) => state.isAuthenticated);
-
+  
   useEffect(() => {
     isAuthenticated && navigate("/dashboard");
   }, [isAuthenticated, navigate]);
