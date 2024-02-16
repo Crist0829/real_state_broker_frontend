@@ -1,4 +1,10 @@
-import { Bed, ParkingCircle, ParkingCircleOff, ShowerHead } from "lucide-react";
+import {
+  Bed,
+  Loader2Icon,
+  ParkingCircle,
+  ParkingCircleOff,
+  ShowerHead,
+} from "lucide-react";
 
 import {
   Carousel,
@@ -10,6 +16,8 @@ import {
 import { Card } from "./ui/card";
 import { Link } from "react-router-dom";
 import { useProperties } from "@/store/useProperties";
+import { useEffect, useState } from "react";
+import { Property } from "@/types";
 
 const imagesDefault = [
   "https://images.unsplash.com/photo-1613545325278-f24b0cae1224?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
@@ -17,14 +25,28 @@ const imagesDefault = [
 ];
 
 function GridAllProperties() {
-  const allProperties = useProperties((state) => state.allProperties);
+  const allPropertiesGlobal = useProperties((state) => state.allProperties);
   const loading = useProperties((state) => state.loadingGetAllProperties);
+
+  const [allProperties, setAllProperties] = useState<Property[]>([]);
+  useEffect(() => {
+    if (allPropertiesGlobal !== null) {
+      setAllProperties(allPropertiesGlobal);
+    }
+  }, [allProperties, allPropertiesGlobal]);
 
   return (
     <article className="container my-10 animate-fade-in" id="all-properties">
       <h2 className="text-3xl font-bold mb-5 ">Edificios disponibles</h2>
-      {loading && <div>Cargando..</div>}
-      {!loading && (
+      {/* Si esta cargando */}
+      {loading && (
+        <div className="w-full flex justify-center p-5">
+          {" "}
+          <Loader2Icon className="animate-spin-counter-clockwise animate-iteration-count-infinite" />{" "}
+        </div>
+      )}
+      {/* Si ya termino de cargar */}
+      {!loading && allProperties !== null && (
         <section className=" grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 relative animate-fade-in">
           {allProperties.map((property) => (
             <Card className="block rounded-lg p-4 shadow-sm border ">
@@ -106,6 +128,11 @@ function GridAllProperties() {
             </Card>
           ))}
         </section>
+      )}
+
+      {/* Si ya termino de cargar y no hay properties */}
+      {!loading && allProperties.length === 0 && (
+        <div>No hay propiedades aún</div>
       )}
     </article>
   );

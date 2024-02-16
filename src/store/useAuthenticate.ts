@@ -24,35 +24,40 @@ export const useAuthenticate = create<State>((set) => {
     user: null,
     isAuthenticated: false,
 
-    csrf : async () => {
-      axios.get('/sanctum/csrf-cookie')
+    csrf: async () => {
+      axios.get("/sanctum/csrf-cookie");
     },
 
-    setAuthenticate: (user: User)  =>
+    setAuthenticate: (user: User) =>
       set(() => ({
         user,
         isAuthenticated: true,
       })),
 
-      deleteAuthenticate: ()  =>
+    deleteAuthenticate: () =>
       set(() => ({
-        user : null,
+        user: null,
         isAuthenticated: false,
       })),
 
-      checkAuth: async () => {
-        try{
-          await axios.get("/api/user");
-        }catch(e){
-          if (e.response === 401) {
-            set(() => ({
-              user: null,
-              isAuthenticated: false,
-            }));
-          }
+    checkAuth: async () => {
+      try {
+        const res = await axios.get("/api/user");
+        if (res.status === 200 || res.status === 204) {
+          set(() => ({
+            user: res.data,
+            isAuthenticated: true,
+          }));
         }
-        
-      },
+      } catch (e) {
+        if (e.response === 401) {
+          set(() => ({
+            user: null,
+            isAuthenticated: false,
+          }));
+        }
+      }
+    },
 
     logout: async () => {
       const res = await axios.post("/logout");

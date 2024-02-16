@@ -1,30 +1,40 @@
 import Sidebar from "@/components/auth/Sidebar";
 import { PropsWithChildren, useEffect } from "react";
 import PrincipalBackground from "@/components/PrincipalBackground";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import axios from "@/lib/axiosConfig";
-import { useAuthenticate } from '@/store/useAuthenticate';
+import { useAuthenticate } from "@/store/useAuthenticate";
+import { useProperties } from "@/store/useProperties";
+import { toast } from "sonner";
 
 function AuthLayout({ children }: PropsWithChildren) {
+  const navigate = useNavigate();
+  const deleteAuthenticated = useAuthenticate(
+    (state) => state.deleteAuthenticate
+  );
+  const setAuthenticated = useAuthenticate((state) => state.setAuthenticate);
 
-  const navigate = useNavigate()
-  const deleteAuthenticated = useAuthenticate((state) => state.deleteAuthenticate);
+  const getProperties = useProperties((state) => state.getProperties);
 
   useEffect(() => {
     const checkAuthenticated = async () => {
-      try{
-        const res = await axios.get('api/user')
-      }catch(e){
-
-        if(e.response.status === 401){
-          deleteAuthenticated()
-          navigate('/')
+      try {
+        const res = await axios.get("api/user");
+        setAuthenticated(res.data);
+        getProperties();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        if (e.response.status === 401) {
+          deleteAuthenticated();
+          toast("No estas autorizado", {
+            description: "Inicia sesión nuevamente",
+          });
+          navigate("/");
         }
-        
       }
-    }
-    checkAuthenticated()
-  },[])
+    };
+    checkAuthenticated();
+  }, []);
 
   return (
     <div className="flex flex-col min-h-dvh  relative">

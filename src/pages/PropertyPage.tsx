@@ -30,16 +30,31 @@ const imagesDefault = [
 function PropertyPage() {
   const { id } = useParams<{ id: string }>(); // Asegúrate de especificar que id es de tipo string
 
-  const { loadingGetAllProperties, allProperties } = useProperties();
+  const { allProperties, loadingGetAllProperties } = useProperties();
+
+  const [currentProperty, setCurrentProperty] = useState<Property | null>(null);
+  const [notFound, setNotFound] = useState(false);
   const [loading, setloading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log(allProperties);
-    console.log(loadingGetAllProperties);
+
+    if (!id || isNaN(parseInt(id))) navigate("/");
+
+    if (allProperties !== null && id !== undefined) {
+      const found = allProperties.find((p) => p.id === parseInt(id));
+      if (found) {
+        setCurrentProperty(found);
+        return setloading(false);
+      }
+      setNotFound(true);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadingGetAllProperties]);
 
-  /* if (notFound) {F
+  if (notFound) {
     return (
       <PrincipalLayout>
         <div className="grid my-20  place-content-center  px-4">
@@ -59,7 +74,7 @@ function PropertyPage() {
         </div>
       </PrincipalLayout>
     );
-  } */
+  }
 
   return (
     <PrincipalLayout>
