@@ -28,13 +28,8 @@ function ButtonDeleteProperty({
           toast.error(getMsgErrorResponse(error) || "Ha ocurrido un error");
         }
       }}
-<<<<<<< HEAD:src/components/admin/ButtonDelete.tsx
       className="w-full text-start"
       variant="ghost"
-=======
-      className={`w-full ${className}`}
-      variant="destructive"
->>>>>>> 197c237fa2ed382d050e21a964cf4415632c0a68:src/components/admin/ButtonDeleteProperty.tsx
     >
       Eliminar <TrashIcon className="text-sm p-1"/>
     </Button>

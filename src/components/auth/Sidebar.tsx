@@ -55,23 +55,6 @@ function Sidebar() {
                 </span>
               </Link>
             </li>
-<<<<<<< HEAD
-=======
-            <li>
-              <Link
-                to="/#all-properties"
-                className={`${buttonVariants({
-                  variant: "ghost",
-                })} group relative`}
-              >
-                <Home />
-                <span className=" invisible absolute -top-6   md:start-full  md:top-1/2 ms-4 md:-translate-y-1/2 rounded  px-2 py-1.5 text-xs font-medium text-white group-hover:visible">
-                  Ver inmuebles
-                </span>
-              </Link>
-            </li>
->>>>>>> 197c237fa2ed382d050e21a964cf4415632c0a68
-
             <li>
               <Link
                 to="/profile"

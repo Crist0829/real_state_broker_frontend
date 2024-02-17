@@ -135,17 +135,11 @@ export const columns: ColumnDef<Property>[] = [
             <Link
               className={`${buttonVariants({
                 variant: "ghost",
-<<<<<<< HEAD
               })} w-full`}
               to={`/property/${property.id}`}
             >
               Visitar <EyeIcon className="text-sm p-1"/>
-=======
-              })} w-full flex items-center gap-1`}
-              to={`/property/${property.id}`}
-            >
-              Visitar <ArrowUpRightFromSquare width={15} height={15} />
->>>>>>> 197c237fa2ed382d050e21a964cf4415632c0a68
+
             </Link>
             <Sheet>
               <SheetTrigger
@@ -179,16 +173,12 @@ export const columns: ColumnDef<Property>[] = [
               </SheetTrigger>
               <UpdateImagesProperty property={property} />
             </Sheet>
-<<<<<<< HEAD
             {
               property.deleted_at && <ButtonRestore property={property} />  
             }
-            <ButtonDelete property={property} />
             {/*  <DropdownMenuItem>Añadir imagenes</DropdownMenuItem>
             <DropdownMenuItem>Añadir precios</DropdownMenuItem> */}
-=======
             <ButtonDeleteProperty className="mt-1" property={property} />
->>>>>>> 197c237fa2ed382d050e21a964cf4415632c0a68
           </DropdownMenuContent>
         </DropdownMenu>
       );

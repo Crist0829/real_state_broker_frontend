@@ -59,18 +59,6 @@ const ChangePasswordForm = () => {
     }));
   };
 
-<<<<<<< HEAD
-            const response = await axios.put('/user/updatePassword/' + user.id, changePassword)
-            
-          if (response.status === 200) {
-            toast.success("La contraseña se actualizó correctamente")
-            setChangePassword({
-                old_password : '',
-                password : '',
-                password_confirmation : ''
-            })
-          }
-=======
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
       <Label>
@@ -82,7 +70,7 @@ const ChangePasswordForm = () => {
           onChange={handleChange}
         />
       </Label>
->>>>>>> 197c237fa2ed382d050e21a964cf4415632c0a68
+
 
       <Label>
         Nueva Contraseña:
