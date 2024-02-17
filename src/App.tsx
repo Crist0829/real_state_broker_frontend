@@ -8,7 +8,7 @@ import DashboardPage from "./pages/admin/DashboardPage";
 
 import { Toaster } from "./components/ui/sonner";
 import Create from "./pages/admin/properties/Create";
-import Show from "./pages/admin/properties/Show";
+
 import PropertyPage from "./pages/PropertyPage";
 import { useAuthenticate } from "./store/useAuthenticate";
 import { useEffect } from "react";
@@ -43,13 +43,10 @@ const router = createBrowserRouter([
         path: "/properties/create",
         element: <Create />,
       },
-      {
-        path: "/property/:id",
-        element: <Show />,
-      },
+
       {
         path: "/profile",
-        element: <Profile/>,
+        element: <Profile />,
       },
     ],
   },
@@ -57,7 +54,7 @@ const router = createBrowserRouter([
 
 function App() {
   const checkAuth = useAuthenticate((state) => state.checkAuth);
-  
+
   useEffect(() => {
     checkAuth();
   }, []);

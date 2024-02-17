@@ -6,7 +6,13 @@ import { toast } from "sonner";
 import { getMsgErrorResponse } from "@/helpers/getMsgErrorResponse";
 import { TrashIcon } from "lucide-react";
 
-function ButtonDelete({ property }: { property: Property }) {
+function ButtonDeleteProperty({
+  property,
+  className,
+}: {
+  property: Property;
+  className?: string;
+}) {
   const refresh = useProperties((state) => state.refreshProperties);
 
   return (
@@ -22,12 +28,17 @@ function ButtonDelete({ property }: { property: Property }) {
           toast.error(getMsgErrorResponse(error) || "Ha ocurrido un error");
         }
       }}
+<<<<<<< HEAD:src/components/admin/ButtonDelete.tsx
       className="w-full text-start"
       variant="ghost"
+=======
+      className={`w-full ${className}`}
+      variant="destructive"
+>>>>>>> 197c237fa2ed382d050e21a964cf4415632c0a68:src/components/admin/ButtonDeleteProperty.tsx
     >
       Eliminar <TrashIcon className="text-sm p-1"/>
     </Button>
   );
 }
 
-export default ButtonDelete;
+export default ButtonDeleteProperty;

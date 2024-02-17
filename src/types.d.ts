@@ -104,3 +104,8 @@ export interface State {
   checkAuth: () => Promise<void>;
   deleteAuthenticate: () => void;
 }
+
+interface ImgPreview {
+  file: File | null;
+  urlTemp: string;
+}

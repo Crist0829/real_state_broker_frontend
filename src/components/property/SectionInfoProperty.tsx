@@ -20,13 +20,15 @@ function SectionInfoProperty({
   currentProperty: Property,
   setCalification : any
 }) {
+  const isAuthenticated = useAuthenticate((state) => state.isAuthenticated);
   const userAuthenticated = useAuthenticate((state) => state.user);
+
   const loadingAuth = useAuthenticate((state) => state.loading);
   console.log(userAuthenticated);
 
   return (
     <div
-      className={`md:w-[400px] flex flex-col gap-3 ${
+      className={`md:w-[400px] flex flex-col gap-3 animate-fade-in-left ${
         currentProperty.images.length === 0 && "mx-auto md:w-[700px]"
       }`}
     >
@@ -101,6 +103,7 @@ function SectionInfoProperty({
           <LoaderIcon className="animate-spin-clockwise animate-iteration-count-infinite" />
         </p>
       ) : (
+        isAuthenticated &&
         currentProperty.user_id === userAuthenticated.id && (
           <Link
             to="/dashboard"

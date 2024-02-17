@@ -66,7 +66,7 @@ function PropertyPage() {
       </PrincipalLayout>
     );
   }
- 
+
   return (
     <PrincipalLayout>
       <main className="container animate-fade-in">
@@ -79,9 +79,12 @@ function PropertyPage() {
         )}
         {/* Si ya lo encontro */}
         {currentProperty && (
-          <section className="flex flex-col md:flex-row gap-5">
+          <section className="flex flex-col md:flex-row gap-5 items-center">
             {currentProperty.images.length > 0 && (
-              <CarouselProperty images={currentProperty.images} />
+              <CarouselProperty
+                images={currentProperty.images}
+                withAutoplay={true}
+              />
             )}
 
             {/* INFORMACIÓN PROPERTY */}
