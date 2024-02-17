@@ -14,6 +14,8 @@ import {
   ArrowUpDown,
   ArrowUpRightFromSquare,
   ChevronDown,
+  EditIcon,
+  EyeIcon,
   Loader,
   PlusCircle,
 } from "lucide-react";
@@ -49,6 +51,8 @@ import { useProperties } from "@/store/useProperties";
 import { statusPropertiesToShow } from "../constants/statusProperties";
 import ButtonDelete from "./ButtonDelete";
 import { Link } from "react-router-dom";
+import FiltersProperties from "../home/FiltersProperties";
+import ButtonRestore from "./ButttonRestore";
 
 export type Payment = {
   id: string;
@@ -124,6 +128,7 @@ export const columns: ColumnDef<Property>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const property = row.original;
+      const showDeletesState = row.original
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -131,16 +136,16 @@ export const columns: ColumnDef<Property>[] = [
               <PlusCircle className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="flex flex-col items-start">
-            <DropdownMenuLabel>Acciones</DropdownMenuLabel>{" "}
+          <DropdownMenuContent className="flex flex-col">
+            <DropdownMenuLabel className="text-start">Acciones</DropdownMenuLabel>{" "}
             {/* actualizar información */}
             <Link
               className={`${buttonVariants({
                 variant: "ghost",
-              })} w-full flex items-center gap-3`}
+              })} w-full`}
               to={`/property/${property.id}`}
             >
-              Visitar <ArrowUpRightFromSquare />
+              Visitar <EyeIcon className="text-sm p-1"/>
             </Link>
             <Sheet>
               <SheetTrigger
@@ -148,7 +153,7 @@ export const columns: ColumnDef<Property>[] = [
                   variant: "ghost",
                 })} w-full`}
               >
-                Editar información
+                Información <EditIcon className="text-sm p-1"/>
               </SheetTrigger>
               <UpdateDataProperty property={property} />
             </Sheet>
@@ -159,7 +164,7 @@ export const columns: ColumnDef<Property>[] = [
                   variant: "ghost",
                 })} w-full`}
               >
-                Editar precios
+                Precios <EditIcon className="text-sm p-1"/>
               </SheetTrigger>
               <UpdatePriceProperty property={property} />
             </Sheet>
@@ -170,10 +175,13 @@ export const columns: ColumnDef<Property>[] = [
                   variant: "ghost",
                 })} w-full`}
               >
-                Editar imágenes
+                Imágenes  <EditIcon className="text-sm p-1"/>
               </SheetTrigger>
               <UpdateImagesProperty property={property} />
             </Sheet>
+            {
+              property.deleted_at && <ButtonRestore property={property} />  
+            }
             <ButtonDelete property={property} />
             {/*  <DropdownMenuItem>Añadir imagenes</DropdownMenuItem>
             <DropdownMenuItem>Añadir precios</DropdownMenuItem> */}
@@ -186,16 +194,26 @@ export const columns: ColumnDef<Property>[] = [
 
 export default function DataTableProperties() {
   const refresh = useProperties((state) => state.counterRefreshProperties);
-
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [page, setPage] = useState(1);
   const [links, setLinks] = useState<ResponseDataLink[]>([]);
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const [filters, setFilters] = useState({
+    bedrooms: "",
+    bathrooms: "",
+    livingrooms: "",
+    kitchens: "",
+    floors: "",
+    type: "",
+    garage: "",
+    paginate: "",
+  });
+  const [showDeletesState, setShowDeletesState ] = useState<boolean>(false)
+ 
   const getProperties = async () => {
-    const res = await axios.get("/properties?page=" + page);
+    const res = await axios.get("/properties?page=" + page, {params : filters});
     setLoading(false);
     setLinks(res.data.properties.links);
     setProperties(res.data.properties.data);
@@ -203,7 +221,7 @@ export default function DataTableProperties() {
 
   useEffect(() => {
     getProperties();
-  }, [page, refresh]);
+  }, [page, refresh, filters, showDeletesState]);
 
   const table = useReactTable({
     data: properties,
@@ -252,6 +270,9 @@ export default function DataTableProperties() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+      <FiltersProperties filters={filters} setFilters={(e : any) => setFilters(e)} showDeletes={true} setShowDeletesState={(e : boolean) => setShowDeletesState(e)} />
+
+      { showDeletesState && <p className="text-xl text-center my-5 "> Mostrando Eliminados </p> }
       {!loading ? (
         <div className="rounded-md border animate-fade-in">
           <Table>
@@ -316,152 +337,3 @@ export default function DataTableProperties() {
     </div>
   );
 }
-
-/*  <Sheet>
-          <SheetTrigger>
-            <Button variant="outline">Ver más</Button>
-          </SheetTrigger>
-          <SheetContent side="right" className="h-screen container">
-            <SheetHeader>
-              <SheetTitle>Edita {property.name}</SheetTitle>
-              <SheetDescription>
-                Make changes to your profile here. Click save when you're done.
-              </SheetDescription>
-            </SheetHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Nombre
-                </Label>
-                <Input
-                  id="name"
-                  placeholder={property.name}
-                  className="col-span-3"
-                />
-              </div>
-
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="description" className="text-right">
-                  Description
-                </Label>
-                <Input
-                  id="description"
-                  placeholder={property.description}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="location" className="text-right">
-                  Ubicación
-                </Label>
-                <Input
-                  id="location"
-                  placeholder={property.location}
-                  className="col-span-3"
-                />
-              </div>
-              <h3 className="text-lg font-bold">Cantidad de: </h3>
-              <div className="grid grid-cols-3 sm:grid-cols-4 max-w-lg  items-center gap-5">
-                <Label htmlFor="floors">
-                  <small className="text-sm  uppercase text-center block">
-                    pisos
-                  </small>
-                  <Input
-                    min={0}
-                    name="floors"
-                    type="number"
-                    id="floors"
-                    placeholder={property.floors.toString()}
-                  />
-                </Label>
-
-                <Label htmlFor="livingrooms">
-                  <small className="text-sm  uppercase text-center block">
-                    livings
-                  </small>
-                  <Input
-                    min={0}
-                    type="number"
-                    id="livingrooms"
-                    name="livingrooms"
-                    placeholder={property.livingrooms.toString()}
-                  />
-                </Label>
-
-                <Label htmlFor="bathrooms">
-                  <small className="text-sm  uppercase text-center block">
-                    baños
-                  </small>
-                  <Input
-                    name="bathrooms"
-                    min={0}
-                    type="number"
-                    id="bathrooms"
-                    placeholder={property.bathrooms.toString()}
-                  />
-                </Label>
-                <Label htmlFor="kitchens">
-                  <small className="text-sm  uppercase text-center block ">
-                    Cocinas
-                  </small>
-                  <Input
-                    min={0}
-                    type="number"
-                    name="kitchens"
-                    id="kitchens"
-                    placeholder={property.kitchens.toString()}
-                  />
-                </Label>
-                <Label htmlFor="bedrooms">
-                  <small className="text-sm  uppercase text-center block ">
-                    dormitorios
-                  </small>
-                  <Input
-                    min={0}
-                    type="number"
-                    name="bedrooms"
-                    id="bedrooms"
-                    placeholder={property.bedrooms.toString()}
-                  />
-                </Label>
-              </div>
-
-              <div className="flex items-center w-full justify-between ml-auto mr-5 my-2 gap-3">
-                <Label
-                  className="text-lg font-bold flex items-center gap-2"
-                  htmlFor="garage"
-                >
-                  Tiene garage
-                  <Input
-                    type="checkbox"
-                    checked={property.garage}
-                    className="w-4 "
-                    name="garage"
-                    id="garage"
-                  />
-                </Label>
-
-                <fieldset>
-                  <legend>Estado</legend>
-                  <select
-                    className="text-black"
-                    defaultValue={property.status}
-                    defaultChecked
-                    name="status"
-                    id="status"
-                  >
-                    <option value="available">Disponible</option>
-                    <option value="sold">Vendido</option>
-                    <option value="rented">Rentado</option>
-                  </select>
-                </fieldset>
-              </div>
-            </div>
-            <SheetFooter>
-              <SheetClose asChild>
-                <Button type="submit">Save changes</Button>
-              </SheetClose>
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
-      ); */

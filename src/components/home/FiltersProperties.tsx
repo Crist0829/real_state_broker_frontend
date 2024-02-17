@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import { Button } from "../ui/button"
 import { Search } from "lucide-react"
+import { Badge } from "../ui/badge"
 
 
-const FiltersProperties = ({filters, setFilters} : {filters : any, setFilters : any}) => {
+const FiltersProperties = ({filters, setFilters, showDeletes, setShowDeletesState} : {filters : any, setFilters : any, showDeletes : boolean, setShowDeletesState : any}) => {
 
     const [formData, setFormData] = useState({
         bedrooms : '',
@@ -15,12 +16,20 @@ const FiltersProperties = ({filters, setFilters} : {filters : any, setFilters : 
         floors : '',
         type : '',
         garage : '',
-        paginate : ''
+        paginate : '',
+        deleted : ''
     })
 
     useEffect(() => setFormData(filters), [filters])
 
     const onChangeHandle = (e: ChangeEvent<HTMLInputElement>) => {
+      if(e.target.name =='deleted'  && e.target.value == "1"  ){
+        setShowDeletesState(true)
+      }
+
+      if(e.target.name =='deleted'  && e.target.value == "0" || e.target.value == ""  ){
+        setShowDeletesState(false)
+      }
         const { name, value } = e.target;
         setFormData((prevData) => ({
           ...prevData,
@@ -30,8 +39,9 @@ const FiltersProperties = ({filters, setFilters} : {filters : any, setFilters : 
 
     return (
         <>
-        <h3 className="text-xl dark:text-white">Filtrar búsqueda</h3>
-        <div className="flex flex-row flex-wrap justify-center items-baseline gap-5 mb-14 mt-5">
+        <Badge className="p-3" variant="outline">Filtros de Búsqueda</Badge>
+
+        <div className="flex flex-row flex-wrap justify-center items-baseline gap-5 mb-8 mt-3">
           <Label htmlFor="floors">
             <small className="text-sm  uppercase text-center block">
               pisos
@@ -102,11 +112,10 @@ const FiltersProperties = ({filters, setFilters} : {filters : any, setFilters : 
 
         </div>
 
-            <div className="flex flex-row flex-wrap justify-center items-baseline gap-5 mb-14">
-
+            <div className="flex flex-row flex-wrap justify-center items-baseline gap-5 mb-8">
             <div className="dark:bg-gray-800">
                 <select
-                  className="dark:text-white bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
+                  className="dark:text-white bg-gray-200 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
                   name="type"
                   onChange={onChangeHandle}
                   defaultValue={filters.type}
@@ -117,9 +126,9 @@ const FiltersProperties = ({filters, setFilters} : {filters : any, setFilters : 
                 </select>
             </div>
             
-            <div className="dark:bg-gray-800">
+            <div className="dark:bg-black">
                 <select
-                  className="dark:text-white bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
+                  className="dark:text-white bg-gray-200 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
                   onChange={onChangeHandle}
                   defaultValue={formData.garage}
                   name="garage"
@@ -134,7 +143,7 @@ const FiltersProperties = ({filters, setFilters} : {filters : any, setFilters : 
 
             <div className="dark:bg-gray-800">
                 <select
-                  className="dark:text-white bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
+                  className="dark:text-white bg-gray-200 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
                   onChange={onChangeHandle}
                   defaultValue={formData.paginate}
                   name="paginate"
@@ -146,6 +155,22 @@ const FiltersProperties = ({filters, setFilters} : {filters : any, setFilters : 
                   <option value="64">64</option>
                 </select>
             </div>
+
+            {
+              showDeletes &&
+              <div className="dark:bg-gray-800">
+                <select
+                  className="dark:text-white bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
+                  onChange={onChangeHandle}
+                  defaultValue={formData.garage}
+                  name="deleted"
+                >
+                  <option value="">Eliminados</option>
+                  <option value="1">Sí</option>
+                  <option value="0">No</option>
+                </select>
+            </div>
+            }
 
             <Button onClick={() => setFilters(formData)} variant="outline">Filtrar <Search className="mx-2"/> </Button>
 

@@ -19,12 +19,13 @@ function PropertyPage() {
   const [notFound, setNotFound] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
+  const [calification, setCalification] = useState<boolean>(false)
+ 
   const fetchProperty = async () => {
     try {
       if (!id || isNaN(parseInt(id))) return navigate("/");
       const res = await getProperty(parseInt(id));
-
+        setCalification(false)
       if (res.status === 200) {
         setCurrentProperty(res.data.property);
       } else {
@@ -42,7 +43,7 @@ function PropertyPage() {
 
   useEffect(() => {
     fetchProperty();
-  }, []);
+  }, [calification]);
 
   if (notFound) {
     return (
@@ -84,7 +85,7 @@ function PropertyPage() {
             )}
 
             {/* INFORMACIÓN PROPERTY */}
-            <SectionInfoProperty currentProperty={currentProperty} />
+            <SectionInfoProperty currentProperty={currentProperty} setCalification={ (e : boolean) => setCalification(e)} />
           </section>
         )}
       </main>

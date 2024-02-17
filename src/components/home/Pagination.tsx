@@ -36,7 +36,7 @@ const Pagination = ({links, setPage} : {links  : ResponseDataLink[] | null, setP
                     {links.map((link, key) => (
                         link.url === null ?
                             (<div key={key}
-                            className="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-gray-500 bg-white text-gray-500">{setLabel(link.label)}</div>)
+                            className="first:ml-0 text-xs font-bold mx-2 flex w-8 h-8 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-gray-500 bg-white text-gray-500">{setLabel(link.label)}</div>)
                             :
                             (<button key={key} onClick={() => onclickHandle(link.url)} className={getClassName(link.active)}>{setLabel(link.label)}</button>)
                         ))}

@@ -33,6 +33,11 @@ const ChangePasswordForm = () => {
             
           if (response.status === 200) {
             toast.success("La contraseña se actualizó correctamente")
+            setChangePassword({
+                old_password : '',
+                password : '',
+                password_confirmation : ''
+            })
           }
 
           if(response.status === 204){

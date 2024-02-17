@@ -15,8 +15,10 @@ import PropertyCalification from "../home/PropertyCalification";
 
 function SectionInfoProperty({
   currentProperty,
+  setCalification
 }: {
-  currentProperty: Property;
+  currentProperty: Property,
+  setCalification : any
 }) {
   const userAuthenticated = useAuthenticate((state) => state.user);
   const loadingAuth = useAuthenticate((state) => state.loading);
@@ -90,6 +92,7 @@ function SectionInfoProperty({
       <PropertyCalification
         propertyId={currentProperty.id}
         califications={currentProperty.califications}
+        setCalification={(e: boolean) => setCalification(e)}
       />
 
       {/* SI ES EL PROPIETARIO */}

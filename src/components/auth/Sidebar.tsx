@@ -55,19 +55,6 @@ function Sidebar() {
                 </span>
               </Link>
             </li>
-            <li>
-              <Link
-                to="/#all-properties"
-                className={`${buttonVariants({
-                  variant: "ghost",
-                })} group relative`}
-              >
-                <Home />
-                <span className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded  px-2 py-1.5 text-xs font-medium text-white group-hover:visible">
-                  Ver inmuebles
-                </span>
-              </Link>
-            </li>
 
             <li>
               <Link
@@ -79,6 +66,20 @@ function Sidebar() {
                 <User2Icon />
                 <span className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded  px-2 py-1.5 text-xs font-medium text-white group-hover:visible">
                   Administrar cuenta
+                </span>
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                to="/#all-properties"
+                className={`${buttonVariants({
+                  variant: "ghost",
+                })} group relative`}
+              >
+                <Home />
+                <span className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded  px-2 py-1.5 text-xs font-medium text-white group-hover:visible">
+                  Ver inmuebles
                 </span>
               </Link>
             </li>
