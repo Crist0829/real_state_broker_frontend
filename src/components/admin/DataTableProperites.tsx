@@ -47,7 +47,7 @@ import axios from "@/lib/axiosConfig";
 import Pagination from "../home/Pagination";
 import { useProperties } from "@/store/useProperties";
 import { statusPropertiesToShow } from "../constants/statusProperties";
-import ButtonDelete from "./ButtonDelete";
+import ButtonDeleteProperty from "./ButtonDeleteProperty";
 import { Link } from "react-router-dom";
 
 export type Payment = {
@@ -102,13 +102,6 @@ export const columns: ColumnDef<Property>[] = [
       return <div className="font-medium">{row.getValue("location")}</div>;
     },
   },
-  /* {
-    accessorKey: "price",
-    header: () => <div className="">Precio</div>,
-    cell: ({ row }) => {
-      return <div className="font-medium">{row.getValue("price")}</div>;
-    },
-  }, */
 
   {
     accessorKey: "size",
@@ -137,10 +130,10 @@ export const columns: ColumnDef<Property>[] = [
             <Link
               className={`${buttonVariants({
                 variant: "ghost",
-              })} w-full flex items-center gap-3`}
+              })} w-full flex items-center gap-1`}
               to={`/property/${property.id}`}
             >
-              Visitar <ArrowUpRightFromSquare />
+              Visitar <ArrowUpRightFromSquare width={15} height={15} />
             </Link>
             <Sheet>
               <SheetTrigger
@@ -174,9 +167,7 @@ export const columns: ColumnDef<Property>[] = [
               </SheetTrigger>
               <UpdateImagesProperty property={property} />
             </Sheet>
-            <ButtonDelete property={property} />
-            {/*  <DropdownMenuItem>Añadir imagenes</DropdownMenuItem>
-            <DropdownMenuItem>Añadir precios</DropdownMenuItem> */}
+            <ButtonDeleteProperty className="mt-1" property={property} />
           </DropdownMenuContent>
         </DropdownMenu>
       );

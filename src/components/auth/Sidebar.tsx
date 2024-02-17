@@ -37,7 +37,7 @@ function Sidebar() {
                 })} group relative`}
               >
                 <Plus />
-                <span className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded px-2 py-1.5 text-xs font-medium text-white group-hover:visible">
+                <span className=" invisible absolute -top-6   md:start-full md:top-1/2 ms-4 md:-translate-y-1/2 rounded px-2 py-1.5 text-xs font-medium text-white group-hover:visible">
                   Añadir
                 </span>
               </Link>
@@ -50,7 +50,7 @@ function Sidebar() {
                 })} group relative`}
               >
                 <LayoutDashboard />
-                <span className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded  px-2 py-1.5 text-xs font-medium text-white group-hover:visible">
+                <span className=" invisible absolute -top-6   md:start-full md:top-1/2 ms-4 md:-translate-y-1/2 rounded  px-2 py-1.5 text-xs font-medium text-white group-hover:visible">
                   Inmuebles
                 </span>
               </Link>
@@ -63,7 +63,7 @@ function Sidebar() {
                 })} group relative`}
               >
                 <Home />
-                <span className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded  px-2 py-1.5 text-xs font-medium text-white group-hover:visible">
+                <span className=" invisible absolute -top-6   md:start-full  md:top-1/2 ms-4 md:-translate-y-1/2 rounded  px-2 py-1.5 text-xs font-medium text-white group-hover:visible">
                   Ver inmuebles
                 </span>
               </Link>
@@ -77,7 +77,7 @@ function Sidebar() {
                 })} group relative`}
               >
                 <User2Icon />
-                <span className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded  px-2 py-1.5 text-xs font-medium text-white group-hover:visible">
+                <span className=" invisible absolute -top-6   md:start-full md:top-1/2 ms-4 md:-translate-y-1/2 rounded  px-2 py-1.5 text-xs font-medium text-white group-hover:visible">
                   Administrar cuenta
                 </span>
               </Link>

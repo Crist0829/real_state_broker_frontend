@@ -35,7 +35,7 @@ const features: FeatureProps[] = [
 
 export const HowItWorks = () => {
   return (
-    <section id="howItWorks" className="container text-center py-16">
+    <section id="howItWorks" className="container text-center py-16 animate-fade-in-up">
       <h2 className="text-3xl md:text-4xl font-bold ">
         ¡Publica o consigue tu propiedad!
       </h2>

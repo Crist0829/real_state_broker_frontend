@@ -210,3 +210,37 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+/* MASONRY PROPERTIES */
+
+.masonry-properties {
+  display: -webkit-box; /* Not needed if autoprefixing */
+  display: -ms-flexbox; /* Not needed if autoprefixing */
+  display: flex;
+  margin-left: -30px; /* gutter size offset */
+  width: auto;
+
+}
+.masonry-item-property {
+  padding-left: 15px; /* gutter size */
+  background-clip: padding-box;
+}
+
+/* Style your items */
+.masonry-item-property > div {
+  /* change div to reference your elements you put in <Masonry> */
+  margin-bottom: 15px ;
+}
+
+/* Optional, different gutter size on mobile */
+@media (max-width: 800px) {
+  .masonry-properties {
+    margin-left: -15px; /* gutter size offset */
+  }
+  .masonry-item-property {
+    padding-left: 15px; /* gutter size offset */
+  }
+  .masonry-item-property > div {
+    margin-bottom: 15px; /* space between items */
+  }
+}
