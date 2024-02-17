@@ -61,7 +61,7 @@ export const Navbar = () => {
   const { isAuthenticated, logout } = useAuthenticate();
 
   return (
-    <header className="sticky top-0 z-40 w-full py-3 " id="header-nav">
+    <header className="sticky top-0 z-40 w-full py-3 animate-fade-in-down" id="header-nav">
       <NavigationMenu className="mx-auto">
         <NavigationMenuList className="container h-14 px-4 w-screen flex justify-between ">
           <NavigationMenuItem className="font-bold flex">

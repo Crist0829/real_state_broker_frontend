@@ -5,7 +5,13 @@ import { useProperties } from "@/store/useProperties";
 import { toast } from "sonner";
 import { getMsgErrorResponse } from "@/helpers/getMsgErrorResponse";
 
-function ButtonDelete({ property }: { property: Property }) {
+function ButtonDeleteProperty({
+  property,
+  className,
+}: {
+  property: Property;
+  className?: string;
+}) {
   const refresh = useProperties((state) => state.refreshProperties);
 
   return (
@@ -21,7 +27,7 @@ function ButtonDelete({ property }: { property: Property }) {
           toast.error(getMsgErrorResponse(error) || "Ha ocurrido un error");
         }
       }}
-      className="w-full"
+      className={`w-full ${className}`}
       variant="destructive"
     >
       Eliminar
@@ -29,4 +35,4 @@ function ButtonDelete({ property }: { property: Property }) {
   );
 }
 
-export default ButtonDelete;
+export default ButtonDeleteProperty;
