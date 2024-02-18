@@ -15,7 +15,6 @@ const PropertyCalification = ({califications, propertyId, setCalification} :
     const isAuthenticated = useAuthenticate((state) => state.isAuthenticated)
     const userAuthenticated = useAuthenticate((state) => state.user)
 
-    
 
     useEffect(() => {
         const checkAuthenticated = () => {
@@ -27,6 +26,8 @@ const PropertyCalification = ({califications, propertyId, setCalification} :
                         const myCalificationR = califications.find(calification => calification.user_id === user?.id)
                         if(myCalificationR) setMyCalification(myCalificationR)
                     }
+                }else{
+                    setShowMyCalification(false)
                 }
                
             } catch (error : any) {
@@ -62,7 +63,7 @@ const PropertyCalification = ({califications, propertyId, setCalification} :
               <p className='text-sm my-1'>Calificación general:</p>
               <ReactStars  
                 value={generalCalification}  
-                isEdit={true}  
+                isEdit={true} 
                 activeColors={[ "red", "orange", "#FFCE00", "#9177FF","#8568FC",]} />
 
             </div>
@@ -75,8 +76,13 @@ const PropertyCalification = ({califications, propertyId, setCalification} :
                     onChange={(e)=> changeHandle(e)} 
                     value={myCalification?.calification}  
                     isEdit={true}  
-                    activeColors={[ "red", "orange", "#FFCE00", "#9177FF","#8568FC",]}/>
+                    isHalf={true}
+                    activeColors={[ "red", "orange", "#FFCE00", "#9177FF","#856899",]}/>
             </div>
+
+                
+
+
             }
     </div>
 
