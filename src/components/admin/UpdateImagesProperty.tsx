@@ -7,18 +7,8 @@ import {
 
 import { ImgPreview, Property } from "@/types";
 import { Button, buttonVariants } from "../ui/button";
-
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-
 import { useState } from "react";
-import { ImagePlusIcon, Trash } from "lucide-react";
+import { ImagePlusIcon } from "lucide-react";
 import { toast } from "sonner";
 import axios from "@/lib/axiosConfig";
 import { getProperty } from "@/services/properties";
@@ -35,9 +25,6 @@ export const INTIAL_VALUE_CREATE_IMAGE = {
 
 function UpdateImagesProperty({ property }: { property: Property }) {
   const [images, setImages] = useState(property.images);
-
-  console.log(images);
-
   const [imagePreview, setImagePreview] = useState<ImgPreview>(
     INTIAL_VALUE_CREATE_IMAGE
   );
@@ -49,7 +36,6 @@ function UpdateImagesProperty({ property }: { property: Property }) {
       description,
       image: imagePreview.file,
     };
-    console.log(data);
     try {
       const res = await axios.post(
         `/property/uploadImage/${property.id}`,
@@ -60,7 +46,6 @@ function UpdateImagesProperty({ property }: { property: Property }) {
           },
         }
       );
-      console.log(res);
       if (res.status === 200) {
         toast.success("Imagen agregada correctamente");
         const currentProperty = await getProperty(property.id);
@@ -68,9 +53,9 @@ function UpdateImagesProperty({ property }: { property: Property }) {
         setImagePreview(INTIAL_VALUE_CREATE_IMAGE);
         setOpenCreate(false);
       }
-    } catch (error) {
-      console.log(error);
-      toast.error(getMsgErrorResponse(error));
+    } catch (error : any) {
+      const errorMsg = getMsgErrorResponse(error)
+      errorMsg && toast.error(errorMsg)
     }
   }
 
@@ -82,25 +67,22 @@ function UpdateImagesProperty({ property }: { property: Property }) {
         const currentProperty = await getProperty(property.id);
         setImages(currentProperty.data.property.images);
       }
-    } catch (error) {
-      console.log(error);
-      toast.error(getMsgErrorResponse(error));
+    } catch (error : any) {
+      const errorMsg = getMsgErrorResponse(error)
+      errorMsg && toast.error(errorMsg)
     }
   }
 
   /* HANDLE CHANGE IMAGE */
   async function handleChangeFile(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files === null) return;
-
     const file = e.target.files[0];
-
     if (!file.type.startsWith("image")) {
       return toast.warning("Solo con esta extensión: .gif, .jpg, .png, .jpeg");
     }
     if (file.size > 3 * 1024 * 1024)
       return toast.warning("El archivo debe pesar menos de 3MB");
     const urlTemp = await fileReader(file);
-
     setImagePreview({
       file,
       urlTemp,

@@ -1,21 +1,29 @@
 import { AxiosError } from "axios";
 import { ZodError } from "zod";
 
-const statusCode = {
+interface ErrorResponse {
+  errores?: Record<string, string[]>;
+  // Otros campos según tu estructura de respuesta
+}
+
+
+//Lista los errores 
+const statusCodeMessages: { [key: number]: string } = {
   404: "No encontrado",
   401: "No autorizado",
 };
 
-/* Si no es de validación de zod ni de respuesta de axios entonces de vuelve false algo poco probable */
-export function getMsgErrorResponse(error: ZodError | AxiosError) {
+export function getMsgErrorResponse(error: ZodError | AxiosError<ErrorResponse>): string | boolean {
   if (error instanceof ZodError) {
     return error.issues[0].message;
   }
+
   if (error instanceof AxiosError) {
-    if (error.response !== undefined && error.response.data.errores) {
-      return Object.values(error.response?.data.errores)[0][0];
+    if (error.response && error.response.status) {
+      return statusCodeMessages[error.response.status] || "Ha ocurrido un error"; 
     }
-    return statusCode[error.response?.status] || "Ha ocurrido un error";
+    return "Ha ocurrido un error";
   }
+
   return false;
 }

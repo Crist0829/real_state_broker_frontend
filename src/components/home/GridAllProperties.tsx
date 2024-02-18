@@ -54,7 +54,7 @@ function GridAllProperties() {
       <h2 className="text-3xl font-bold mb-14">PROPIEDADES DISPONIBLES</h2>
       {/* Si esta cargando */}
 
-      <FiltersProperties setFilters={(e) => setFilters(e)} filters={filters} showDeletes={false} />
+      <FiltersProperties setFilters={(e : any) => setFilters(e)} filters={filters} showDeletes={false} setShowDeletesState={false} />
 
       {loading && (
         <div className="w-full flex justify-center p-5">
@@ -73,7 +73,7 @@ function GridAllProperties() {
             <CardProperty
               key={property.id}
               property={property}
-              setCalification={(e) => setCalification(e)}
+              setCalification={(e : any) => setCalification(e)}
             />
           ))}
         </Masonry>
@@ -95,9 +95,9 @@ function GridAllProperties() {
         <div>No hay propiedades aún</div>
       )}
 
-      {allProperties !== null && (
+      {allProperties && allProperties.links !== null && (
         <Pagination
-          links={allProperties.links}
+          links={allProperties?.links}
           setPage={(n: number) => setPage(n)}
         />
       )}

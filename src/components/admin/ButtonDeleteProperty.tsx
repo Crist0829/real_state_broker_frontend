@@ -13,7 +13,7 @@ function ButtonDeleteProperty({
   property: Property;
   className?: string;
 }) {
-  const refresh = useProperties((state) => state.refreshProperties);
+  const refresh = useProperties((state : any) => state.refreshProperties);
 
   return (
     <Button
@@ -24,11 +24,11 @@ function ButtonDeleteProperty({
             refresh();
             toast.success("Eliminado correctamente");
           }
-        } catch (error) {
+        } catch (error : any) {
           toast.error(getMsgErrorResponse(error) || "Ha ocurrido un error");
         }
       }}
-      className="w-full text-start"
+      className={`w-full text-start ${className}`}
       variant="ghost"
     >
       Eliminar <TrashIcon className="text-sm p-1"/>

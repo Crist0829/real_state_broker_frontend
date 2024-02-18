@@ -5,7 +5,7 @@ import { Label } from "../ui/label";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { toast } from "sonner";
 import axios from "@/lib/axiosConfig";
-import { AxiosError } from "axios";
+import { getMsgErrorResponse } from "@/helpers/getMsgErrorResponse";
 
 const ChangePasswordForm = () => {
   const user = useAuthenticate((state) => state.user);
@@ -29,7 +29,7 @@ const ChangePasswordForm = () => {
       await csrf();
 
       const response = await axios.put(
-        "/user/updatePassword/" + user.id,
+        "/user/updatePassword/" + user?.id,
         changePassword
       );
 
@@ -40,14 +40,9 @@ const ChangePasswordForm = () => {
       if (response.status === 204) {
         toast.success("No puede elegir la misma contraseña");
       }
-    } catch (error) {
-      toast.error("Ocurrió un problema, por favor verifique los datos");
-      if (error instanceof AxiosError) {
-        alert(
-          error.response?.data.message ||
-            "Ha ocurrido un error al editar la información"
-        );
-      }
+    } catch (error : any) {
+      const errorMsg = getMsgErrorResponse(error)
+      errorMsg && toast.error(errorMsg)
     }
   };
 

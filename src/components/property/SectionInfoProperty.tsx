@@ -22,9 +22,8 @@ function SectionInfoProperty({
 }) {
   const isAuthenticated = useAuthenticate((state) => state.isAuthenticated);
   const userAuthenticated = useAuthenticate((state) => state.user);
-
   const loadingAuth = useAuthenticate((state) => state.loading);
-  console.log(userAuthenticated);
+
 
   return (
     <div
@@ -104,7 +103,7 @@ function SectionInfoProperty({
         </p>
       ) : (
         isAuthenticated &&
-        currentProperty.user_id === userAuthenticated.id && (
+        currentProperty.user_id === userAuthenticated?.id && (
           <Link
             to="/dashboard"
             className={buttonVariants({

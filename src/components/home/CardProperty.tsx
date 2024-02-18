@@ -1,8 +1,7 @@
-import { Bed, ParkingCircle, ParkingCircleOff, ShowerHead, StarHalf, StarIcon, StarOff, StarOffIcon } from 'lucide-react';
+import { Bed, ParkingCircle, ParkingCircleOff, ShowerHead } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
 import { Card } from "../ui/card"
-import { Property, ResponseData } from '@/types';
+import { Property } from '@/types';
 import CarouselProperty from './CarouselProperty';
 import PropertyCalification from './PropertyCalification';
 
@@ -66,7 +65,7 @@ const CardProperty = ({ property, setCalification }: { property: Property, setCa
           </div>
 
               {
-                <PropertyCalification califications={property.califications} propertyId={property.id} setCalification={(e) => setCalification(e)} />
+                <PropertyCalification califications={property.califications} propertyId={property.id} setCalification={(e : number) => setCalification(e)} />
               }
           
         </div>

@@ -117,7 +117,7 @@ const FiltersProperties = ({filters, setFilters, showDeletes, setShowDeletesStat
                 <select
                   className="dark:text-white bg-gray-200 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
                   name="type"
-                  onChange={onChangeHandle}
+                  onChange={() => onChangeHandle}
                   defaultValue={filters.type}
                 >
                   <option value="">Tipo</option>
@@ -129,7 +129,7 @@ const FiltersProperties = ({filters, setFilters, showDeletes, setShowDeletesStat
             <div className="dark:bg-black">
                 <select
                   className="dark:text-white bg-gray-200 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
-                  onChange={onChangeHandle}
+                  onChange={() => onChangeHandle}
                   defaultValue={formData.garage}
                   name="garage"
                 >
@@ -144,7 +144,7 @@ const FiltersProperties = ({filters, setFilters, showDeletes, setShowDeletesStat
             <div className="dark:bg-gray-800">
                 <select
                   className="dark:text-white bg-gray-200 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
-                  onChange={onChangeHandle}
+                  onChange={() => onChangeHandle}
                   defaultValue={formData.paginate}
                   name="paginate"
                 >
@@ -161,7 +161,7 @@ const FiltersProperties = ({filters, setFilters, showDeletes, setShowDeletesStat
               <div className="dark:bg-gray-800">
                 <select
                   className="dark:text-white bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
-                  onChange={onChangeHandle}
+                  onChange={() => onChangeHandle}
                   defaultValue={formData.garage}
                   name="deleted"
                 >

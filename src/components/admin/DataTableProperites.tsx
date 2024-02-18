@@ -12,7 +12,6 @@ import {
 } from "@tanstack/react-table";
 import {
   ArrowUpDown,
-  ArrowUpRightFromSquare,
   ChevronDown,
   EditIcon,
   EyeIcon,
@@ -48,7 +47,6 @@ import axios from "@/lib/axiosConfig";
 
 import Pagination from "../home/Pagination";
 import { useProperties } from "@/store/useProperties";
-import { statusPropertiesToShow } from "../constants/statusProperties";
 import ButtonDeleteProperty from "./ButtonDeleteProperty";
 import { Link } from "react-router-dom";
 import FiltersProperties from "../home/FiltersProperties";
@@ -68,8 +66,7 @@ export const columns: ColumnDef<Property>[] = [
     header: "Estado",
     cell: ({ row }) => (
       <div className="capitalize">
-        {statusPropertiesToShow[row.getValue("status")] ||
-          row.getValue("status")}
+        { row.getValue("status")}
       </div>
     ),
   },
@@ -121,7 +118,6 @@ export const columns: ColumnDef<Property>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const property = row.original;
-      const showDeletesState = row.original
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -190,7 +186,7 @@ export default function DataTableProperties() {
   const refresh = useProperties((state) => state.counterRefreshProperties);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState<number>(1);
   const [links, setLinks] = useState<ResponseDataLink[]>([]);
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
@@ -326,7 +322,7 @@ export default function DataTableProperties() {
         </div>
       )}
       <div className="flex items-center justify-end space-x-2 py-4">
-        <Pagination setPage={(e) => setPage(e)} links={links} />
+        <Pagination setPage={(e : number) => setPage(e)} links={links} />
       </div>
     </div>
   );

@@ -10,10 +10,7 @@ interface State {
   allProperties: ResponseData | null;
   loadingGetProperties: boolean;
   loadingGetAllProperties: boolean;
-  currentPage: number;
-
   counterRefreshProperties: number;
-
   getProperties: () => Promise<void>;
   getAllProperties: () => Promise<void>;
   refreshProperties: () => void;

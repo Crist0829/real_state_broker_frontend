@@ -32,15 +32,15 @@ export function TablePricesProperty({
   async function handleDelete(id: number) {
     try {
       const res = await axios.delete(`property/price/${id}`);
-
       if (res.status === 200 || res.status === 204) {
         refresh();
         const currentProperty = await getProperty(property.id);
         setPrices(currentProperty.data.property.prices);
         return toast.success("Eliminado correctamente");
       }
-    } catch (error) {
-      getMsgErrorResponse(error);
+    } catch (error : any) {
+      const errorMsg = getMsgErrorResponse(error);
+      errorMsg && toast.error(errorMsg)
     }
   }
 

@@ -1,7 +1,7 @@
 import Axios from 'axios'
 
 const axios = Axios.create({
-    baseURL: 'http://localhost:8000/',
+    baseURL: 'https://tl300.selfip.net:41/real_estate_broker_backend',
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
     },

@@ -27,7 +27,6 @@ import { getMsgErrorResponse } from "@/helpers/getMsgErrorResponse";
 
 function UpdateDataProperty({ property }: { property: Property }) {
   const [formData, setFormData] = useState<Property>(property);
-
   const refresh = useProperties((state) => state.refreshProperties);
 
   function handleChange(e: any) {
@@ -45,10 +44,9 @@ function UpdateDataProperty({ property }: { property: Property }) {
         refresh();
         toast.success(`${formData.name} Actualizado correctamente`);
       }
-    } catch (error) {
-      getMsgErrorResponse(error);
-      console.log(error);
-      console.log(error.response.data.message);
+    } catch (error : any) {
+      const errorMsg = getMsgErrorResponse(error);
+      errorMsg && toast.error(errorMsg)
     }
   }
 
@@ -189,7 +187,6 @@ function UpdateDataProperty({ property }: { property: Property }) {
           </div>
           {/* STATUS */}
           <Select
-            id="status"
             name="status"
             onValueChange={(value) => {
               const e = {

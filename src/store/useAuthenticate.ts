@@ -33,7 +33,7 @@ export const useAuthenticate = create<State>((set) => {
             isAuthenticated: true,
           }));
         }
-      } catch (e) {
+      } catch (e : any) {
         if (e.response === 401) {
           set(() => ({
             user: null,
@@ -49,7 +49,6 @@ export const useAuthenticate = create<State>((set) => {
 
     logout: async () => {
       const res = await axios.post("/logout");
-
       if (res.status === 204) {
         set(() => ({
           user: null,

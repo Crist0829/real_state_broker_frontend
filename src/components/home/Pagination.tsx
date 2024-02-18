@@ -1,14 +1,17 @@
 
 import { ResponseDataLink } from '@/types';
-import { ArrowBigLeftIcon, ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
-const Pagination = ({links, setPage} : {links  : ResponseDataLink[] | null, setPage : any}) => {
+const Pagination = ({links, setPage} : {links  : ResponseDataLink[], setPage : any}) => {
 
-    /* console.log(Object.keys(currentFilters)) */
 
-    const onclickHandle = (link : string) =>{
-        const page = parseInt(link.split("=")[1])
-        setPage(page)
+
+    const onclickHandle = (link : string | null) =>{
+        if(link != null){
+            const page = parseInt(link.split("=")[1])
+            setPage(page)
+        }
+        
     }
 
     function getClassName(active : boolean) {
@@ -30,10 +33,10 @@ const Pagination = ({links, setPage} : {links  : ResponseDataLink[] | null, setP
     }
 
     return (
-        links.length > 3 && (
+        links?.length > 3 && (
             <div className="my-14">
                 <div className="flex flex-wrap mt-8 justify-center">
-                    {links.map((link, key) => (
+                    {links?.map((link, key) => (
                         link.url === null ?
                             (<div key={key}
                             className="first:ml-0 text-xs font-bold mx-2 flex w-8 h-8 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-gray-500 bg-white text-gray-500">{setLabel(link.label)}</div>)

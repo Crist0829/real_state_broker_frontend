@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  SheetClose,
   SheetContent,
   SheetDescription,
   SheetFooter,
@@ -9,7 +8,7 @@ import {
 } from "../ui/sheet";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { CreatePrice, Property } from "@/types";
+import { Property } from "@/types";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import {
@@ -17,7 +16,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
@@ -62,11 +60,9 @@ function UpdatePriceProperty({ property }: { property: Property }) {
         toast.success("Precio añadido correctamente");
         refresh();
       }
-    } catch (error) {
-      console.log(error)
-      toast.error(
-        getMsgErrorResponse(error) || "Ha ocurrido un error inesperado"
-      );
+    } catch (error : any) {
+      const errorMsg = getMsgErrorResponse(error)
+      errorMsg && toast.error(errorMsg)
     }
   }
 
@@ -147,7 +143,6 @@ function UpdatePriceProperty({ property }: { property: Property }) {
               <Label>Tipo</Label>
               {/* tipo */}
               <Select
-                id="type"
                 name="type"
                 onValueChange={(value) => {
                   const e = {

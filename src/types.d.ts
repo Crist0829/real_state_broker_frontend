@@ -3,6 +3,7 @@ export interface Property {
   name: string;
   description: string;
   location: string;
+  deleted_at : string | null;
   created_at: string;
   updated_at: string;
   size: number;

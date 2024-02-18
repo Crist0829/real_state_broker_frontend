@@ -25,10 +25,8 @@ import AuthLayout from "@/layouts/AuthLayout";
 import axios from "@/lib/axiosConfig";
 import { useAuthenticate } from "@/store/useAuthenticate";
 import { createPropertySchema } from "@/validations/properties";
-import { AxiosError } from "axios";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-import { ZodError } from "zod";
 
 const INITIAL_VALUE = {
   name: "",
@@ -43,6 +41,7 @@ const INITIAL_VALUE = {
   garage: false,
   status: "available",
 };
+
 function Create() {
   const { user } = useAuthenticate();
 
@@ -53,27 +52,21 @@ function Create() {
   async function handleSubmit() {
     try {
       const dataValidated = createPropertySchema.parse(data);
-      console.log(dataValidated);
       const res = await axios.post("/properties/store", dataValidated);
-      console.log(res);
       if (res.status === 200) {
         toast.success("Inmueble añadido correctamente");
         setData(INITIAL_VALUE);
-
-        formRef.current.reset();
+        /* if(formRef != null && formRef.current != null)
+        formRef.current.reset() */
       }
-    } catch (error) {
-      console.log(error);
-      toast.error(
-        getMsgErrorResponse(error) || "Ha ocurrido un error inesperado"
-      );
+    } catch (error : any) {
+      const errorMsg = getMsgErrorResponse(error)
+      errorMsg && toast.error(errorMsg)
     }
   }
 
   function handleChange(
     e: any
-    /* | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEventHandler<HTMLTextAreaElement> */
   ) {
     setData((old) => ({
       ...old,
@@ -245,7 +238,6 @@ function Create() {
                   </fieldset> */}
 
                   <Select
-                    id="status"
                     name="status"
                     onValueChange={(value) => {
                       const e = {

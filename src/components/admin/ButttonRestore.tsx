@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { useProperties } from "@/store/useProperties";
 import { toast } from "sonner";
 import { getMsgErrorResponse } from "@/helpers/getMsgErrorResponse";
-import { Redo2, RedoIcon, TrashIcon } from "lucide-react";
+import { Redo2 } from "lucide-react";
 
 function ButtonRestore({ property }: { property: Property }) {
   const refresh = useProperties((state) => state.refreshProperties);
@@ -18,7 +18,7 @@ function ButtonRestore({ property }: { property: Property }) {
             refresh();
             toast.success("Se resturauró la propiedad");
           }
-        } catch (error) {
+        } catch (error : any) {
           toast.error(getMsgErrorResponse(error) || "Ha ocurrido un error");
         }
       }}
