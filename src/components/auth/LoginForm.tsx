@@ -53,7 +53,7 @@ const LoginForm: React.FC = () => {
       await csrf(); */
       const userValidated = loginUserSchema.parse(user);
       const response = await axios.post("/login", userValidated);
-      localStorage.setItem('token', response.data.token)
+      localStorage.setItem("token", response.data.token);
       if (response.status === 204 || response.status === 200) {
         const userAuthenticated = await axios.get("/user");
         toast.success("Inicio de sesión correcto");
@@ -66,10 +66,8 @@ const LoginForm: React.FC = () => {
       });
     } catch (error) {
       if (error instanceof AxiosError) {
-        toast.error(
-          error.response?.data.message ||
-            "Ha ocurrido un error al registrar al usuario"
-        );
+        console.log(error.response?.data.message);
+        toast.error("Ha ocurrido un error al iniciar sesión");
       }
       if (error instanceof ZodError) {
         const msg = error.issues[0].message;
@@ -79,8 +77,8 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <PrincipalLayout>
-      <Card className="w-[400px] mx-auto dark:bg-zinc-900/30 animate-fade-in">
+    <PrincipalLayout className=" border  flex items-center justify-center">
+      <Card className="max-w-[400px] w-11/12  mx-auto dark:bg-zinc-900/30 animate-fade-in">
         <CardHeader className="flex justify-between flex-row">
           <CardTitle>Inicia Sesión</CardTitle>
         </CardHeader>

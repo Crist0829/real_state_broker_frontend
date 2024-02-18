@@ -7,10 +7,10 @@ function Hero() {
   const isAuthnticated = useAuthenticate((state) => state.isAuthenticated);
 
   return (
-    <div className="pt-8 animate-fade-in-down">
-      <div className="relative mx-auto flex max-w-2xl flex-col items-center">
-        <div className="bg-gradient-to-r from-black to-gray-500 text-transparent bg-clip-text">
-          <h2 className="text-center text-3xl font-medium  dark:text-gray-50 sm:text-6xl">
+    <div className="pt-8 animate-fade-in-down ">
+      <div className="relative mx-auto flex max-w-3xl flex-col items-center">
+        <div className="bg-gradient-to-r w-full from-black to-gray-500 text-transparent bg-clip-text">
+            <h2 className="text-center text-xl sm:text-3xl font-medium  dark:text-gray-50 md:text-6xl  w-full">
             RM DREAMS - TU HOGAR PERFECTO
           </h2>
         </div>

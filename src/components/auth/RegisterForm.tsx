@@ -53,7 +53,6 @@ const RegisterUser: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-   
 
     try {
       const csrf = () => axios.get("/sanctum/csrf-cookie");
@@ -74,7 +73,7 @@ const RegisterUser: React.FC = () => {
       });
     } catch (error) {
       if (error instanceof AxiosError) {
-       
+        console.log(error);
         toast.error(
           error.response?.data.message ||
             "Ha ocurrido un error al registrar al usuario"
@@ -90,8 +89,8 @@ const RegisterUser: React.FC = () => {
   };
 
   return (
-    <PrincipalLayout>
-      <Card className="w-[400px] mx-auto dark:bg-zinc-900/30 animate-fade-in">
+    <PrincipalLayout className=" border  flex items-center justify-center">
+      <Card className="max-w-[400px] w-11/12 mx-auto dark:bg-zinc-900/30 animate-fade-in">
         <CardHeader className="flex justify-between flex-row">
           <CardTitle>Registro de Usuario</CardTitle>
         </CardHeader>
