@@ -17,6 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 import PrincipalLayout from "@/layouts/PrincipalLayout";
 import { useAuthenticate } from "@/store/useAuthenticate";
 import { toast } from "sonner";
+import { Loader } from "lucide-react";
 // import { useAuthenticate } from "@/store/useAuthenticate";
 
 interface User {
@@ -31,6 +32,8 @@ const RegisterUser: React.FC = () => {
 
   const setAuthenticate = useAuthenticate((state) => state.setAuthenticate);
   const isAuthenticated = useAuthenticate((state) => state.isAuthenticated);
+
+  const [loadingRegister, setLoadingRegister] = useState(false);
 
   useEffect(() => {
     isAuthenticated && navigate("/dashboard");
@@ -53,7 +56,7 @@ const RegisterUser: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
+    setLoadingRegister(true);
     try {
       const csrf = () => axios.get("/sanctum/csrf-cookie");
       await csrf();
@@ -64,13 +67,6 @@ const RegisterUser: React.FC = () => {
         setAuthenticate(userAuthenticated.data);
         navigate("/dashboard");
       }
-
-      setUser({
-        name: "",
-        email: "",
-        password: "",
-        password_confirmation: "",
-      });
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error);
@@ -81,10 +77,18 @@ const RegisterUser: React.FC = () => {
       }
       if (error instanceof ZodError) {
         const msg = error.issues[0].message;
-        return toast.error(msg);
+        toast.error(msg);
       }
 
       // console.error("Error al registrar usuario", error.response.data);
+    } finally {
+      setLoadingRegister(false);
+      setUser({
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
+      });
     }
   };
 
@@ -136,7 +140,13 @@ const RegisterUser: React.FC = () => {
               />
             </Label>
 
-            <Button>Registrar</Button>
+            <Button disabled={loadingRegister}>
+              {loadingRegister ? (
+                <Loader className="animate-spin-clockwise animate-iteration-count-infinite" />
+              ) : (
+                "Registrar"
+              )}
+            </Button>
           </form>
         </CardContent>
         <CardFooter>

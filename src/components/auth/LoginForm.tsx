@@ -17,6 +17,7 @@ import { useAuthenticate } from "@/store/useAuthenticate";
 import { Link, useNavigate } from "react-router-dom";
 import PrincipalLayout from "@/layouts/PrincipalLayout";
 import { toast } from "sonner";
+import { Loader } from "lucide-react";
 
 interface User {
   email: string;
@@ -28,6 +29,8 @@ const LoginForm: React.FC = () => {
 
   const setAuthenticate = useAuthenticate((state) => state.setAuthenticate);
   const isAuthenticated = useAuthenticate((state) => state.isAuthenticated);
+
+  const [loadingLogin, setLoadingLogin] = useState(false);
 
   useEffect(() => {
     isAuthenticated && navigate("/dashboard");
@@ -48,6 +51,7 @@ const LoginForm: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setLoadingLogin(true);
     try {
       /* const csrf = () => axios.get("/sanctum/csrf-cookie");
       await csrf(); */
@@ -60,10 +64,6 @@ const LoginForm: React.FC = () => {
         setAuthenticate(userAuthenticated.data);
         navigate("/dashboard");
       }
-      setUser({
-        email: "",
-        password: "",
-      });
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response?.data.message);
@@ -71,8 +71,14 @@ const LoginForm: React.FC = () => {
       }
       if (error instanceof ZodError) {
         const msg = error.issues[0].message;
-        return toast.error(msg);
+        toast.error(msg);
       }
+    } finally {
+      setLoadingLogin(false);
+      setUser({
+        email: "",
+        password: "",
+      });
     }
   };
 
@@ -104,7 +110,13 @@ const LoginForm: React.FC = () => {
               />
             </Label>
 
-            <Button>Iniciar sesión</Button>
+            <Button disabled={loadingLogin}>
+              {loadingLogin ? (
+                <Loader className="animate-spin-clockwise animate-iteration-count-infinite" />
+              ) : (
+                "Iniciar sesión"
+              )}
+            </Button>
           </form>
         </CardContent>
         <CardFooter className=" justify-end">
