@@ -5,12 +5,12 @@ import { Loader2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import CarouselProperty from "@/components/home/CarouselProperty";
+import CarouselProperty from "@/components/properties/CarouselProperty";
 import { getProperty } from "@/services/properties";
 import { getMsgErrorResponse } from "@/helpers/getMsgErrorResponse";
 import { toast } from "sonner";
 
-import SectionInfoProperty from "@/components/property/SectionInfoProperty";
+import SectionInfoProperty from "@/components/properties/SectionInfoProperty";
 
 function PropertyPage() {
   const { id } = useParams<{ id: string }>(); // Asegúrate de especificar que id es de tipo string

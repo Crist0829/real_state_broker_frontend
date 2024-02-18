@@ -4,37 +4,37 @@ import { PropertyCalificationType, User } from '@/types'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import ReactStars from 'react-rating-star-with-type'
+import { useAuthenticate } from '@/store/useAuthenticate'
 
 const PropertyCalification = ({califications, propertyId, setCalification} : 
     {califications : PropertyCalificationType[], propertyId : number, setCalification? : any}) => {
-
     const [generalCalification, setGeneralCalification] = useState<number>(0)
     const [myCalification, setMyCalification] = useState<PropertyCalificationType | null >(null)
     const [showMyCalification, setShowMyCalification] = useState<boolean>(false)
-    const [_user, setUser] = useState<User | null>(null)
+    const [ user, setUser] = useState<User | null>(null)
+    const isAuthenticated = useAuthenticate((state) => state.isAuthenticated)
+    const userAuthenticated = useAuthenticate((state) => state.user)
 
     
 
     useEffect(() => {
-        const checkAuthenticated = async () => {
+        const checkAuthenticated = () => {
             try {
-                const res = await axios.get('api/user');
-                setUser(res.data);
-                if (res.data != null) {
+                if (isAuthenticated) {
+                    setUser(userAuthenticated)
                     setShowMyCalification(true)
-                    //Saco mi calificacion
                     if (califications.length > 0) {
-                        const myCalificationR = califications.find(calification => calification.user_id === res.data.id)
+                        const myCalificationR = califications.find(calification => calification.user_id === user?.id)
                         if(myCalificationR) setMyCalification(myCalificationR)
                     }
                 }
                
-            } catch (error) {
-                console.error('Error al obtener datos:', error);
+            } catch (error : any) {
+                toast.error('Error al obtener datos del usuario:', error);
             }
         }
         checkAuthenticated();
-    }, []);
+    }, [isAuthenticated]);
 
     useEffect(() => {
          // Saco la calificación general
@@ -50,7 +50,7 @@ const PropertyCalification = ({califications, propertyId, setCalification} :
         const res = await axios.post('/property/addCalification/' + propertyId, { calification : e})
         setCalification(true)
         setMyCalification(res.data)
-        toast("Calificación agregada", {
+        toast.success("Calificación agregada", {
             description: "Has calificado esta propiedad",
           });
     }
@@ -71,11 +71,11 @@ const PropertyCalification = ({califications, propertyId, setCalification} :
             showMyCalification && 
             <div className={`flex flex-col items-center justify-center ${generalCalification == 0 && 'mt-5'}`}>
                 <p className='text-sm my-1'>Tu calificación:</p>
-            <ReactStars 
-                onChange={(e)=> changeHandle(e)} 
-                value={myCalification?.calification}  
-                isEdit={true}  
-                activeColors={[ "red", "orange", "#FFCE00", "#9177FF","#8568FC",]}/>
+                <ReactStars 
+                    onChange={(e)=> changeHandle(e)} 
+                    value={myCalification?.calification}  
+                    isEdit={true}  
+                    activeColors={[ "red", "orange", "#FFCE00", "#9177FF","#8568FC",]}/>
             </div>
             }
     </div>

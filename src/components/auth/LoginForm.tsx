@@ -49,15 +49,13 @@ const LoginForm: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const csrf = () => axios.get("/sanctum/csrf-cookie");
-      await csrf();
+      /* const csrf = () => axios.get("/sanctum/csrf-cookie");
+      await csrf(); */
       const userValidated = loginUserSchema.parse(user);
       const response = await axios.post("/login", userValidated);
-
-      console.log(response);
-
+      localStorage.setItem('token', response.data.token)
       if (response.status === 204 || response.status === 200) {
-        const userAuthenticated = await axios.get("/api/user");
+        const userAuthenticated = await axios.get("/user");
         toast.success("Inicio de sesión correcto");
         setAuthenticate(userAuthenticated.data);
         navigate("/dashboard");

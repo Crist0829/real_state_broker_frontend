@@ -11,7 +11,7 @@ import SectionPrices from "./SectionPrices";
 import { Link } from "react-router-dom";
 import { buttonVariants } from "../ui/button";
 import { useAuthenticate } from "@/store/useAuthenticate";
-import PropertyCalification from "../home/PropertyCalification";
+import PropertyCalification from "./PropertyCalification";
 
 function SectionInfoProperty({
   currentProperty,

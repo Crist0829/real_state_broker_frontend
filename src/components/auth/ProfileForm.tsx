@@ -24,14 +24,12 @@ const ProfileForm = () => {
       const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
-          const csrf = () => axios.get("/sanctum/csrf-cookie");
-          await csrf();
-
+          
             const response = await axios.put('/user/update/' + user?.id, userForm)
             
           if (response.status === 200) {
             toast.success("La información se actualizó correctamente")
-            const userAuthenticated = await axios.get("/api/user"); 
+            const userAuthenticated = await axios.get("/user"); 
             setAuthenticate(userAuthenticated.data);
           }
 

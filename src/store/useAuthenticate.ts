@@ -26,7 +26,7 @@ export const useAuthenticate = create<State>((set) => {
 
     checkAuth: async () => {
       try {
-        const res = await axios.get("/api/user");
+        const res = await axios.get("/user");
         if (res.status === 200 || res.status === 204) {
           set(() => ({
             user: res.data,
@@ -39,6 +39,7 @@ export const useAuthenticate = create<State>((set) => {
             user: null,
             isAuthenticated: false,
           }));
+          localStorage.removeItem('token')
         }
       } finally {
         set(() => ({
@@ -50,6 +51,7 @@ export const useAuthenticate = create<State>((set) => {
     logout: async () => {
       const res = await axios.post("/logout");
       if (res.status === 204) {
+        localStorage.removeItem('token')
         set(() => ({
           user: null,
           isAuthenticated: false,

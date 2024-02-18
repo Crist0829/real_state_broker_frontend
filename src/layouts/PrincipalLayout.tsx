@@ -1,6 +1,6 @@
-import { Navbar } from "@/components/main/Navbar";
+import { Navbar } from "@/components/common/Navbar";
 import { PropsWithChildren } from "react";
-import PrincipalBackground from "@/components/main/PrincipalBackground";
+import PrincipalBackground from "@/components/common/PrincipalBackground";
 
 function PrincipalLayout({ children }: PropsWithChildren) {
 

@@ -15,7 +15,7 @@ import { getProperty } from "@/services/properties";
 import { getMsgErrorResponse } from "@/helpers/getMsgErrorResponse";
 import FormAddImage from "./FormAddImage";
 import { fileReader } from "@/helpers/fileReader";
-import CarouselProperty from "../home/CarouselProperty";
+import CarouselProperty from "./CarouselProperty";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const INTIAL_VALUE_CREATE_IMAGE = {

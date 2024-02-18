@@ -1,4 +1,4 @@
-import GridAllProperties from "@/components/home/GridAllProperties";
+import GridAllProperties from "@/components/properties/GridAllProperties";
 import Hero from "@/components/home/Hero";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import PrincipalLayout from "@/layouts/PrincipalLayout";

@@ -45,11 +45,11 @@ import UpdateImagesProperty from "./UpdateImagesProperty";
 import UpdatePriceProperty from "./UpdatePriceProperty";
 import axios from "@/lib/axiosConfig";
 
-import Pagination from "../home/Pagination";
+import Pagination from "../common/Pagination";
 import { useProperties } from "@/store/useProperties";
 import ButtonDeleteProperty from "./ButtonDeleteProperty";
 import { Link } from "react-router-dom";
-import FiltersProperties from "../home/FiltersProperties";
+import FiltersProperties from "./FiltersProperties";
 import ButtonRestore from "./ButttonRestore";
 
 export type Payment = {
@@ -204,9 +204,16 @@ export default function DataTableProperties() {
  
   const getProperties = async () => {
     const res = await axios.get("/properties?page=" + page, {params : filters});
+    const firstProperty : Property = res.data.properties.data[0]
+    firstProperty.deleted_at != null ? setShowDeletesState(true) : setShowDeletesState(false) 
+    console.log(firstProperty)
     setLoading(false);
     setLinks(res.data.properties.links);
     setProperties(res.data.properties.data);
+    
+
+    console.log(showDeletesState)
+    
   };
 
   useEffect(() => {
@@ -260,9 +267,9 @@ export default function DataTableProperties() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <FiltersProperties filters={filters} setFilters={(e : any) => setFilters(e)} showDeletes={true} setShowDeletesState={(e : boolean) => setShowDeletesState(e)} />
+      <FiltersProperties filters={filters} setFilters={(e : any) => setFilters(e)} showDeletes={true} />
 
-      { showDeletesState && <p className="text-xl text-center my-5 "> Mostrando Eliminados </p> }
+      { showDeletesState && <p className="text-xl text-center my-5 text-red-500 dark:text-red-400 "> Mostrando Eliminados </p> }
       {!loading ? (
         <div className="rounded-md border animate-fade-in">
           <Table>
