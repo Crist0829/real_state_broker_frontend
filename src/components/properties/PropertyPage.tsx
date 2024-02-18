@@ -33,7 +33,7 @@ function PropertyPage() {
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.log(error);
+    
       toast.error(getMsgErrorResponse(error));
       error.response.status === 404 && setNotFound(true);
     } finally {
