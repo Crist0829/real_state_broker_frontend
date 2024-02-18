@@ -15,7 +15,7 @@ function Hero() {
           </h2>
         </div>
 
-        <p className="mt-6 text-center text-lg leading-6 text-gray-600 dark:text-gray-200">
+        <p className="mt-6 text-center text-lg leading-6 text-gray-600 dark:text-gray-200 text-pretty px-4 md:px-0">
           Explora una amplia gama de propiedades en cualquier lugar del mundo
           con <span className="cursor-wait opacity-70">nosotros</span> Desde
           apartamentos urbanos hasta casas rurales, ¡tenemos todo para ti!

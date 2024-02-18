@@ -53,7 +53,7 @@ const RegisterUser: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log(user);
+   
 
     try {
       const csrf = () => axios.get("/sanctum/csrf-cookie");
@@ -74,7 +74,7 @@ const RegisterUser: React.FC = () => {
       });
     } catch (error) {
       if (error instanceof AxiosError) {
-        console.log(error.response?.data);
+       
         toast.error(
           error.response?.data.message ||
             "Ha ocurrido un error al registrar al usuario"

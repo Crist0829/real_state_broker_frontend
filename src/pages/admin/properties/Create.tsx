@@ -253,9 +253,7 @@ function Create() {
                       <SelectValue placeholder="Elegir estado" />
                     </SelectTrigger>
                     <SelectContent
-                      onChange={(e) => {
-                        console.log(e);
-                      }}
+                    
                     >
                       <SelectGroup>
                         <SelectLabel>Estado</SelectLabel>

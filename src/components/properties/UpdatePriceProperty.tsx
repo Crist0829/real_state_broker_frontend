@@ -55,7 +55,7 @@ function UpdatePriceProperty({ property }: { property: Property }) {
 
       if (res.status === 200) {
         const currenrProperty = await getProperty(property.id);
-        console.log(currenrProperty);
+       
         setPrices(currenrProperty.data.property.prices); // actualiza la lista de precios
         toast.success("Precio añadido correctamente");
         refresh();
