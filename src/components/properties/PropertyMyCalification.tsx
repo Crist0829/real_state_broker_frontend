@@ -1,14 +1,14 @@
-import axios from "axios";
 import ReactStars from "react-rating-star-with-type";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 import { PropertyCalificationType } from "@/types";
+import axios from "@/lib/axiosConfig";
 
 interface Props {
   propertyId: number;
   myCalification: PropertyCalificationType | null;
   setMyCalification: Dispatch<SetStateAction<PropertyCalificationType | null>>;
-  setCalification: Dispatch<SetStateAction<PropertyCalificationType | null>>;
+  setCalification: Dispatch<SetStateAction<boolean>>;
   generalCalification: number;
 }
 
@@ -24,13 +24,17 @@ function PropertyMyCalification({
     isCalificate: false,
   });
 
-  function handleCalification(e: MouseEvent<HTMLSpanElement, MouseEvent>) {
-    const tempCalification = e.target.dataset.calification;
+  function handleCalification(
+    e: MouseEvent<HTMLSpanElement, globalThis.MouseEvent>
+  ) {
+    const tempCalification = e.currentTarget.dataset.calification;
 
-    setCalificationTemp({
-      isCalificate: true,
-      calification: tempCalification,
-    });
+    if (tempCalification) {
+      setCalificationTemp({
+        isCalificate: true,
+        calification: parseInt(tempCalification),
+      });
+    }
   }
 
   function handleCancelCalification() {

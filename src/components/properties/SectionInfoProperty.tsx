@@ -1,33 +1,26 @@
 import { Property } from "@/types";
-import {
-  Bed,
-  ImageOff,
-  LoaderIcon,
-  ParkingCircle,
-  ParkingCircleOff,
-  ShowerHead,
-} from "lucide-react";
+import { ImageOff, LoaderIcon } from "lucide-react";
 import SectionPrices from "./SectionPrices";
 import { Link } from "react-router-dom";
 import { buttonVariants } from "../ui/button";
 import { useAuthenticate } from "@/store/useAuthenticate";
 import PropertyCalification from "./PropertyCalification";
+import PropertyDetails from "./PropertyDetails";
 
 function SectionInfoProperty({
   currentProperty,
-  setCalification
+  setCalification,
 }: {
-  currentProperty: Property,
-  setCalification : any
+  currentProperty: Property;
+  setCalification: any;
 }) {
   const isAuthenticated = useAuthenticate((state) => state.isAuthenticated);
   const userAuthenticated = useAuthenticate((state) => state.user);
   const loadingAuth = useAuthenticate((state) => state.loading);
 
-
   return (
     <div
-      className={`md:w-[400px] flex flex-col gap-3 animate-fade-in-left ${
+      className={`w-full md:w-[400px] flex flex-col gap-3 animate-fade-in-left ${
         currentProperty.images.length === 0 && "mx-auto md:w-[700px]"
       }`}
     >
@@ -52,38 +45,11 @@ function SectionInfoProperty({
             Sin imagenes
           </p>
         )}
-        <div className="flex gap-3 items-center ">
-          {currentProperty.garage ? (
-            <>
-              <ParkingCircle width={35} height={35} />
-              <div className="">
-                <p className="opacity-90">con garage</p>
-              </div>
-            </>
-          ) : (
-            <>
-              <ParkingCircleOff width={35} height={35} />
-              <div className="">
-                <p className="opacity-90">Sin garage</p>
-              </div>
-            </>
-          )}
-        </div>
 
-        <div className="flex gap-3 items-center">
-          <ShowerHead width={35} height={35} />
-          <div className=" flex gap-3">
-            <p className="font-medium">{currentProperty.bathrooms}</p>
-            <p className="opacity-90">Baños</p>
-          </div>
-        </div>
-        <div className="flex gap-3 items-center">
-          <Bed width={35} height={35} />
-          <div className=" flex gap-3">
-            <p className="font-medium">{currentProperty.bedrooms}</p>
-            <p className="opacity-90">Dormitorio</p>
-          </div>
-        </div>
+        <PropertyDetails
+          className=" w-full  flex-col items-start justify-start "
+          property={currentProperty}
+        />
       </div>
 
       {/* SECTION PRECIOS */}

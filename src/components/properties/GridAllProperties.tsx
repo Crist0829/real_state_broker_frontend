@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import CardProperty from "./CardProperty";
 import { Loader2Icon } from "lucide-react";
-import { FiltersPropertiesType, Property, ResponseData } from "@/types";
+import { Property, ResponseData } from "@/types";
 import Pagination from "../common/Pagination";
 import axios from "@/lib/axiosConfig";
 import FiltersProperties  from "./FiltersProperties";

@@ -66,14 +66,14 @@ const LoginForm: React.FC = () => {
       });
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(
+        toast.error(
           error.response?.data.message ||
             "Ha ocurrido un error al registrar al usuario"
         );
       }
       if (error instanceof ZodError) {
         const msg = error.issues[0].message;
-        return alert(msg);
+        return toast.error(msg);
       }
     }
   };

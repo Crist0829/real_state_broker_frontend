@@ -16,6 +16,7 @@ import { AxiosError } from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import PrincipalLayout from "@/layouts/PrincipalLayout";
 import { useAuthenticate } from "@/store/useAuthenticate";
+import { toast } from "sonner";
 // import { useAuthenticate } from "@/store/useAuthenticate";
 
 interface User {
@@ -30,7 +31,7 @@ const RegisterUser: React.FC = () => {
 
   const setAuthenticate = useAuthenticate((state) => state.setAuthenticate);
   const isAuthenticated = useAuthenticate((state) => state.isAuthenticated);
-  
+
   useEffect(() => {
     isAuthenticated && navigate("/dashboard");
   }, [isAuthenticated, navigate]);
@@ -55,8 +56,8 @@ const RegisterUser: React.FC = () => {
     console.log(user);
 
     try {
-      const csrf = () => axios.get('/sanctum/csrf-cookie')
-      await csrf()
+      const csrf = () => axios.get("/sanctum/csrf-cookie");
+      await csrf();
       const userValidated = createUserSchema.parse(user);
       const response = await axios.post("/register", userValidated);
       if (response.status === 204) {
@@ -74,14 +75,14 @@ const RegisterUser: React.FC = () => {
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response?.data);
-        alert(
+        toast.error(
           error.response?.data.message ||
             "Ha ocurrido un error al registrar al usuario"
         );
       }
       if (error instanceof ZodError) {
         const msg = error.issues[0].message;
-        return alert(msg);
+        return toast.error(msg);
       }
 
       // console.error("Error al registrar usuario", error.response.data);

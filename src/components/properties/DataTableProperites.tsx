@@ -206,13 +206,13 @@ export default function DataTableProperties() {
     const res = await axios.get("/properties?page=" + page, {params : filters});
     const firstProperty : Property = res.data.properties.data[0]
     firstProperty.deleted_at != null ? setShowDeletesState(true) : setShowDeletesState(false) 
-    console.log(firstProperty)
+   
     setLoading(false);
     setLinks(res.data.properties.links);
     setProperties(res.data.properties.data);
     
 
-    console.log(showDeletesState)
+    
     
   };
 

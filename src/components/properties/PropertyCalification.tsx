@@ -59,7 +59,7 @@ const PropertyCalification = ({
       const gC = Math.round(tC / nC);
       setGeneralCalification(gC);
     }
-  }, [setCalification]);
+  }, [califications, setCalification]);
 
   /* calification temporal */
 
@@ -73,7 +73,6 @@ const PropertyCalification = ({
         <p className="text-sm my-1">Calificación general:</p>
         <ReactStars
           value={generalCalification}
-          isEdit={true}
           activeColors={["red", "orange", "#FFCE00", "#9177FF", "#8568FC"]}
         />
       </div>

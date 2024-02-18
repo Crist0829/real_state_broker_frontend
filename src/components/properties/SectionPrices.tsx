@@ -9,8 +9,8 @@ function SectionPrices({ prices }: { prices: Price[] }) {
     <div>
       {prices.length === 0 ? (
         <div className="flex gap-3 items-center">
-          <p className="text-lg text-zinc-500">
-            Todavia no se han actualizaco los precios
+          <p className=" text-zinc-500">
+            Todavia no se han actualizado los precios
           </p>
         </div>
       ) : (
