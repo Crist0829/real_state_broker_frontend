@@ -1,7 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import axios from "../../lib/axiosConfig";
 import { createUserSchema } from "@/validations/user";
-import { ZodError } from "zod";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -12,12 +11,12 @@ import {
 } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "@radix-ui/react-dropdown-menu";
-import { AxiosError } from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import PrincipalLayout from "@/layouts/PrincipalLayout";
 import { useAuthenticate } from "@/store/useAuthenticate";
 import { toast } from "sonner";
 import { Loader } from "lucide-react";
+import { getMsgErrorResponse } from "@/helpers/getMsgErrorResponse";
 // import { useAuthenticate } from "@/store/useAuthenticate";
 
 interface User {
@@ -58,28 +57,23 @@ const RegisterUser: React.FC = () => {
     e.preventDefault();
     setLoadingRegister(true);
     try {
-      const csrf = () => axios.get("/sanctum/csrf-cookie");
-      await csrf();
       const userValidated = createUserSchema.parse(user);
       const response = await axios.post("/register", userValidated);
       if (response.status === 204) {
         const userAuthenticated = await axios.get("/api/user");
         setAuthenticate(userAuthenticated.data);
+        const token = response.data.token
+        if(token){
+          localStorage.setItem('token', token)
+        } else{
+          toast.error("El usuario se registró pero no se pudo iniciar sesión, intentelo más tarde")
+          throw new Error("No se pudo obtener el token de acceso") 
+        }
         navigate("/dashboard");
       }
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        console.log(error);
-        toast.error(
-          error.response?.data.message ||
-            "Ha ocurrido un error al registrar al usuario"
-        );
-      }
-      if (error instanceof ZodError) {
-        const msg = error.issues[0].message;
-        toast.error(msg);
-      }
-
+    } catch (error : any) {
+      const errorMsg = getMsgErrorResponse(error)
+      errorMsg && toast.error(errorMsg)
       // console.error("Error al registrar usuario", error.response.data);
     } finally {
       setLoadingRegister(false);
@@ -93,7 +87,7 @@ const RegisterUser: React.FC = () => {
   };
 
   return (
-    <PrincipalLayout className=" border  flex items-center justify-center">
+    <PrincipalLayout className="flex items-center justify-center">
       <Card className="max-w-[400px] w-11/12 mx-auto dark:bg-zinc-900/30 animate-fade-in">
         <CardHeader className="flex justify-between flex-row">
           <CardTitle>Registro de Usuario</CardTitle>

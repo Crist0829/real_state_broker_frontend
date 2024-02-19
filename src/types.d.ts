@@ -25,15 +25,15 @@ export interface Property {
 
 export interface FiltersPropertiesType{
   
-    bedrooms: number
-    bathrooms: number
-    livingrooms: number
-    kitchens: number
-    floors: number
+    bedrooms: string
+    bathrooms: string
+    livingrooms: string
+    kitchens: string
+    floors: strin
     type: string
-    garage: boolean
-    paginate: number
-    deleted : boolean
+    garage: string
+    paginate: string
+    deleted : string
 
   }
 

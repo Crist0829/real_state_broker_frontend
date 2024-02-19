@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import CardProperty from "./CardProperty";
 import { Loader2Icon } from "lucide-react";
-import { Property, ResponseData } from "@/types";
+import { FiltersPropertiesType, Property, ResponseData } from "@/types";
 import Pagination from "../common/Pagination";
 import axios from "@/lib/axiosConfig";
 import FiltersProperties  from "./FiltersProperties";
@@ -25,16 +25,19 @@ function GridAllProperties() {
   const [loading, setLoading] = useState(true);
   const [calification, setCalification] = useState<boolean>(false);
   const [page, setPage] = useState(1);
-  const [filters, setFilters] = useState<any>({
-    bedrooms: "",
-    bathrooms: "",
-    livingrooms: "",
-    kitchens: "",
-    floors: "",
-    type: "",
-    garage: "",
-    paginate: "",
-  });
+  const [filters, setFilters] = useState<FiltersPropertiesType>({
+    bedrooms : "",
+    bathrooms : "", 
+    livingrooms : "",
+    kitchens : "",
+    floors : "",
+    type : '',
+    garage : "",
+    paginate :"",
+    deleted : "" 
+});
+
+  
 
   const fetchAllProperties = async () => {
     const res = await axios.get("/all-properties?page=" + page, {
@@ -54,7 +57,7 @@ function GridAllProperties() {
       <h2 className="text-3xl font-bold mb-14">PROPIEDADES DISPONIBLES</h2>
       {/* Si esta cargando */}
 
-      <FiltersProperties setFilters={(e : any) => setFilters(e)} filters={filters} showDeletes={false}/>
+      <FiltersProperties setFilters={(e : FiltersPropertiesType) => setFilters(e)} filters={filters} showDeletes={false}/>
 
       {loading && (
         <div className="w-full flex justify-center p-5">

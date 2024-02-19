@@ -66,9 +66,7 @@ const PropertyCalification = ({
   return (
     <div className="flex gap-8 my-5 items-center justify-center ">
       <div
-        className={`flex flex-col items-center justify-center ${
-          generalCalification == 0 && "mt-5"
-        }`}
+        className={`flex flex-col items-center justify-center`}
       >
         <p className="text-sm my-1">Calificación general:</p>
         <ReactStars

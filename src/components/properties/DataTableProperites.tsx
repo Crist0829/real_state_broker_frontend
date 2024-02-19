@@ -38,7 +38,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Property, ResponseDataLink } from "@/types";
+import { FiltersPropertiesType, Property, ResponseDataLink } from "@/types";
 
 import UpdateDataProperty from "./UpdateDataProperty";
 import UpdateImagesProperty from "./UpdateImagesProperty";
@@ -190,26 +190,31 @@ export default function DataTableProperties() {
   const [links, setLinks] = useState<ResponseDataLink[]>([]);
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({
-    bedrooms: "",
-    bathrooms: "",
-    livingrooms: "",
-    kitchens: "",
-    floors: "",
-    type: "",
-    garage: "",
-    paginate: "",
-  });
+  const [filters, setFilters] = useState<FiltersPropertiesType>({
+    bedrooms : "",
+    bathrooms : "", 
+    livingrooms : "",
+    kitchens : "",
+    floors : "",
+    type : '',
+    garage : "",
+    paginate :"",
+    deleted : "" 
+});
   const [showDeletesState, setShowDeletesState] = useState<boolean>(false);
 
   const getProperties = async () => {
     const res = await axios.get("/properties?page=" + page, {
       params: filters,
     });
-    const firstProperty: Property = res.data.properties.data[0];
-    firstProperty.deleted_at != null
+
+    if(res.data.properties && res.data.properties.length > 0){
+      const firstProperty: Property = res.data.properties.data[0];
+      firstProperty.deleted_at != null
       ? setShowDeletesState(true)
       : setShowDeletesState(false);
+    }
+
 
     setLoading(false);
     setLinks(res.data.properties.links);
@@ -269,7 +274,7 @@ export default function DataTableProperties() {
       </div>
       <FiltersProperties
         filters={filters}
-        setFilters={(e: any) => setFilters(e)}
+        setFilters={(e: FiltersPropertiesType) => setFilters(e)}
         showDeletes={true}
       />
 

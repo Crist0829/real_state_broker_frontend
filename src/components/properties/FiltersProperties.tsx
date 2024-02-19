@@ -2,25 +2,35 @@ import {  useEffect, useState } from "react"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import { Button } from "../ui/button"
-import { Search } from "lucide-react"
+import { RedoIcon, Search } from "lucide-react"
 import { Badge } from "../ui/badge"
+import { FiltersPropertiesType } from "@/types"
 
 
-const FiltersProperties = ({filters, setFilters, showDeletes} : {filters : any, setFilters : any, showDeletes : boolean}) => {
+const FiltersProperties = ({filters, setFilters, showDeletes} : {filters : FiltersPropertiesType, setFilters : any, showDeletes : boolean}) => {
 
-    const [formData, setFormData] = useState<any>({
-        bedrooms : "",
-        bathrooms : "", 
-        livingrooms : "",
-        kitchens : "",
-        floors : "",
-        type : '',
-        garage : "",
-        paginate :"",
-        deleted : "" 
-    })
+    const initialFiltersValue = {
+      bedrooms : "",
+      bathrooms : "", 
+      livingrooms : "",
+      kitchens : "",
+      floors : "",
+      type : '',
+      garage : "",
+      paginate :"",
+      deleted : "" 
+  }
+
+    const [formData, setFormData] = useState<FiltersPropertiesType>(initialFiltersValue)
+    const [ showResetFiltersButton, setShowResetFiltersButton] = useState<boolean>(false)
 
     useEffect(() => setFormData(filters), [filters])
+
+    useEffect(() => {
+    
+      setShowResetFiltersButton(formData !== filters )
+    
+    }, [formData])
 
     const onChangeHandle = (e: any) => {
         const { name, value } = e.target;
@@ -28,6 +38,11 @@ const FiltersProperties = ({filters, setFilters, showDeletes} : {filters : any, 
           ...prevData,
           [name]: value,
         }));
+    }
+
+    const resetFilters = () => {
+      setFilters(initialFiltersValue)
+      setFormData(initialFiltersValue)
     }
 
     return (
@@ -111,7 +126,7 @@ const FiltersProperties = ({filters, setFilters, showDeletes} : {filters : any, 
                   className="dark:text-white bg-gray-200 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
                   name="type"
                   onChange={onChangeHandle}
-                  defaultValue={filters.type}
+                  value={formData.type}
                 >
                   <option value="">Tipo</option>
                   <option value="sale">Venta</option>
@@ -123,7 +138,7 @@ const FiltersProperties = ({filters, setFilters, showDeletes} : {filters : any, 
                 <select
                   className="dark:text-white bg-gray-200 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
                   onChange={onChangeHandle}
-                  defaultValue={formData.garage}
+                  value={formData.garage}
                   name="garage"
                 >
                   <option value="">Garage</option>
@@ -138,7 +153,7 @@ const FiltersProperties = ({filters, setFilters, showDeletes} : {filters : any, 
                 <select
                   className="dark:text-white bg-gray-200 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
                   onChange={onChangeHandle}
-                  defaultValue={formData.paginate}
+                  value={formData.paginate}
                   name="paginate"
                 >
                   <option value="">Resultados</option>
@@ -155,7 +170,7 @@ const FiltersProperties = ({filters, setFilters, showDeletes} : {filters : any, 
                 <select
                   className="dark:text-white bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
                   onChange={onChangeHandle}
-                  defaultValue={formData.garage}
+                  value={formData.deleted}
                   name="deleted"
                 >
                   <option value="">Eliminados</option>
@@ -166,6 +181,10 @@ const FiltersProperties = ({filters, setFilters, showDeletes} : {filters : any, 
             }
 
             <Button onClick={() => setFilters(formData)} variant="outline">Filtrar <Search className="mx-2"/> </Button>
+            {
+              showResetFiltersButton && 
+              <Button onClick={() => resetFilters()} variant="outline">Resetear <RedoIcon className="mx-2"/> </Button>
+            }
 
 
             </div>

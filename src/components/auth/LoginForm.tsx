@@ -1,7 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import axios from "../../lib/axiosConfig";
 import { loginUserSchema } from "@/validations/user";
-import { ZodError } from "zod";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -12,12 +11,12 @@ import {
 } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "@radix-ui/react-dropdown-menu";
-import { AxiosError } from "axios";
 import { useAuthenticate } from "@/store/useAuthenticate";
 import { Link, useNavigate } from "react-router-dom";
 import PrincipalLayout from "@/layouts/PrincipalLayout";
 import { toast } from "sonner";
 import { Loader } from "lucide-react";
+import { getMsgErrorResponse } from "@/helpers/getMsgErrorResponse";
 
 interface User {
   email: string;
@@ -64,15 +63,9 @@ const LoginForm: React.FC = () => {
         setAuthenticate(userAuthenticated.data);
         navigate("/dashboard");
       }
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        console.log(error.response?.data.message);
-        toast.error("Ha ocurrido un error al iniciar sesión");
-      }
-      if (error instanceof ZodError) {
-        const msg = error.issues[0].message;
-        toast.error(msg);
-      }
+    } catch (error : any) {
+      const errorMsg = getMsgErrorResponse(error)
+      errorMsg && toast.error(errorMsg)
     } finally {
       setLoadingLogin(false);
       setUser({
@@ -83,7 +76,7 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <PrincipalLayout className=" border  flex items-center justify-center">
+    <PrincipalLayout className="flex items-center justify-center">
       <Card className="max-w-[400px] w-11/12  mx-auto dark:bg-zinc-900/30 animate-fade-in">
         <CardHeader className="flex justify-between flex-row">
           <CardTitle>Inicia Sesión</CardTitle>

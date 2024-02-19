@@ -39,6 +39,7 @@ function UpdatePriceProperty({ property }: { property: Property }) {
   });
 
   function handleChange(e: any) {
+    console.log(e)
     setNewPrice((old) => ({
       ...old,
       [e.target.name]: e.target.value,
@@ -48,6 +49,7 @@ function UpdatePriceProperty({ property }: { property: Property }) {
   async function handleSubmit() {
     try {
       const newPriceValidated = createPriceSchema.parse(newPrice);
+      console.log(newPriceValidated)
       const res = await axios.post(
         `/property/addPrice/${property.id}`,
         newPriceValidated
@@ -160,8 +162,8 @@ function UpdatePriceProperty({ property }: { property: Property }) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value="rent">Venta</SelectItem>
-                    <SelectItem value="sale">Renta</SelectItem>
+                    <SelectItem value="sale">Venta</SelectItem>
+                    <SelectItem value="rent">Renta</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
