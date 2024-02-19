@@ -1,30 +1,48 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## RM DREAMS - PRUEBA TÉCNICA - FRONT END
 
-Currently, two official plugins are available:
+[Ver Demo](https://real-state-broker-frontend.vercel.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Es una plataforma para la administración de inmuebles contiene (por ahora):
 
-## Expanding the ESLint configuration
+- Inicio de sesión (mediante tokens, cookies y sesiones).
+- CRUD para los inmuebles.
+- Administración de la cuenta y restablecimiento de la contraseña.
+- Envío de correo (despchado por queues).
+- Sistema de calificación por estrelas de los inmuebles.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Requerimientos y documentación:
+Todos los requerimientos iniciales están listados en el documento requerimientos.pdf (en el directorio documentos del repositorio del [Back End](https://github.com/Crist0829/real_estate_broker_backend.git) )
+así mismo está el documento documentación.pdf donde explico más detalladamente algunas funcionalidades y estructura.
 
-- Configure the top-level `parserOptions` property like this:
+### Instrucciones de instalación:
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+1)  Clona el repositorio:
+
+
+```bash
+   git clone https://github.com/Crist0829/real_state_broker_frontend.git
+   cd /real_state_broker_frontend
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+2)  Instala las depencias de npm:
+
+
+```bash
+   npm install
+```
+
+
+3)  Inicie el servidor
+
+```bash
+   npm run dev
+```
+
+
+
+
+
+
+
+
