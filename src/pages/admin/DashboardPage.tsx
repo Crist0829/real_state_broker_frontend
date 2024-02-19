@@ -9,8 +9,9 @@ function DashboardPage() {
     <AuthLayout>
       <main className="py-10">
         <h1 className="text-3xl md:text-6xl text-center font-extrabold animate-slide-in-top">
-          Inmuebes de {user?.name}
+          ¡Bienvenid@!
         </h1>
+        <p className="text-center">Estas son tus propiedades publicadas</p>
         <DataTableProperties />
       </main>
     </AuthLayout>

@@ -59,17 +59,19 @@ const RegisterUser: React.FC = () => {
     try {
       const userValidated = createUserSchema.parse(user);
       const response = await axios.post("/register", userValidated);
-      if (response.status === 204) {
-        const userAuthenticated = await axios.get("/api/user");
-        setAuthenticate(userAuthenticated.data);
+      if (response.status === 204 || response.status === 200) {
         const token = response.data.token
         if(token){
           localStorage.setItem('token', token)
+          const userAuthenticated = await axios.get("/user");
+          setAuthenticate(userAuthenticated.data);
+          toast.success('Usuario registrado correctamente')
+          navigate("/dashboard");
         } else{
           toast.error("El usuario se registró pero no se pudo iniciar sesión, intentelo más tarde")
           throw new Error("No se pudo obtener el token de acceso") 
         }
-        navigate("/dashboard");
+       
       }
     } catch (error : any) {
       const errorMsg = getMsgErrorResponse(error)
