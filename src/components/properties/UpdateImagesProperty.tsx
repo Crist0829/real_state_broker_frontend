@@ -92,7 +92,7 @@ function UpdateImagesProperty({ property }: { property: Property }) {
   return (
     <SheetContent
       side="top"
-      className="h-screen flex flex-col shadow-2xl  overflow-auto gap-0"
+      className="h-screen flex flex-col shadow-2xl  overflow-auto gap-0 bg-neutral-300 dark:bg-transparent"
     >
       <SheetHeader>
         <SheetTitle className="text-3xl text-center">

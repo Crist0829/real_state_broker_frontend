@@ -71,7 +71,7 @@ function UpdatePriceProperty({ property }: { property: Property }) {
   return (
     <SheetContent
       side="left"
-      className="h-screen  container shadow-2xl w-full sm:max-w-xl overflow-auto flex flex-col items-center"
+      className="h-screen  container shadow-2xl w-full sm:max-w-xl overflow-auto flex flex-col items-center bg-neutral-300 dark:bg-transparent"
     >
       <SheetHeader>
         <SheetTitle className="text-2xl">

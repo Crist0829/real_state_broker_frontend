@@ -51,7 +51,7 @@ function UpdateDataProperty({ property }: { property: Property }) {
   }
 
   return (
-    <SheetContent side="right" className="h-screen container shadow-2xl">
+    <SheetContent side="right" className="h-screen container shadow-2xl bg-neutral-300 dark:bg-transparent">
       <SheetHeader>
         <SheetTitle>
           <h2 className="text-lg">

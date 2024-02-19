@@ -1,9 +1,8 @@
 import DataTableProperties from "@/components/properties/DataTableProperites";
 import AuthLayout from "@/layouts/AuthLayout";
-import { useAuthenticate } from "@/store/useAuthenticate";
 
 function DashboardPage() {
-  const user = useAuthenticate((state) => state.user);
+
 
   return (
     <AuthLayout>
