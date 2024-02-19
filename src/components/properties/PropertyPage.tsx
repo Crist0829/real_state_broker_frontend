@@ -5,12 +5,12 @@ import { Loader2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import CarouselProperty from "@/components/home/CarouselProperty";
+import CarouselProperty from "@/components/properties/CarouselProperty";
 import { getProperty } from "@/services/properties";
 import { getMsgErrorResponse } from "@/helpers/getMsgErrorResponse";
 import { toast } from "sonner";
 
-import SectionInfoProperty from "@/components/property/SectionInfoProperty";
+import SectionInfoProperty from "@/components/properties/SectionInfoProperty";
 
 function PropertyPage() {
   const { id } = useParams<{ id: string }>(); // Asegúrate de especificar que id es de tipo string
@@ -33,7 +33,7 @@ function PropertyPage() {
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.log(error);
+    
       toast.error(getMsgErrorResponse(error));
       error.response.status === 404 && setNotFound(true);
     } finally {
@@ -69,7 +69,7 @@ function PropertyPage() {
 
   return (
     <PrincipalLayout>
-      <main className="container animate-fade-in">
+      <main className="container animate-fade-in mb-4 md:mb-0">
         {/* Si esta cargando */}
         {loading && (
           <div className="w-full flex justify-center p-52">
@@ -79,7 +79,7 @@ function PropertyPage() {
         )}
         {/* Si ya lo encontro */}
         {currentProperty && (
-          <section className="flex flex-col md:flex-row gap-5 items-center">
+          <section className="flex flex-col md:flex-row gap-5 items-center ">
             {currentProperty.images.length > 0 && (
               <CarouselProperty
                 images={currentProperty.images}

@@ -45,12 +45,13 @@ import UpdateImagesProperty from "./UpdateImagesProperty";
 import UpdatePriceProperty from "./UpdatePriceProperty";
 import axios from "@/lib/axiosConfig";
 
-import Pagination from "../home/Pagination";
+import Pagination from "../common/Pagination";
 import { useProperties } from "@/store/useProperties";
 import ButtonDeleteProperty from "./ButtonDeleteProperty";
 import { Link } from "react-router-dom";
-import FiltersProperties from "../home/FiltersProperties";
+import FiltersProperties from "./FiltersProperties";
 import ButtonRestore from "./ButttonRestore";
+import { statusPropertiesToShow } from "../constants/statusProperties";
 
 export type Payment = {
   id: string;
@@ -66,7 +67,7 @@ export const columns: ColumnDef<Property>[] = [
     header: "Estado",
     cell: ({ row }) => (
       <div className="capitalize">
-        { row.getValue("status")}
+        {statusPropertiesToShow[row.getValue("status") as string]}
       </div>
     ),
   },
@@ -125,8 +126,10 @@ export const columns: ColumnDef<Property>[] = [
               <PlusCircle className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="flex flex-col">
-            <DropdownMenuLabel className="text-start">Acciones</DropdownMenuLabel>{" "}
+          <DropdownMenuContent className="flex items-start justify-start flex-col">
+            <DropdownMenuLabel className="text-start">
+              Acciones
+            </DropdownMenuLabel>{" "}
             {/* actualizar información */}
             <Link
               className={`${buttonVariants({
@@ -134,16 +137,15 @@ export const columns: ColumnDef<Property>[] = [
               })} w-full`}
               to={`/property/${property.id}`}
             >
-              Visitar <EyeIcon className="text-sm p-1"/>
-
+              Visitar <EyeIcon className="text-sm p-1" />
             </Link>
             <Sheet>
               <SheetTrigger
                 className={`${buttonVariants({
                   variant: "ghost",
-                })} w-full`}
+                })} w-full  `}
               >
-                Información <EditIcon className="text-sm p-1"/>
+                Información <EditIcon className="text-sm p-1" />
               </SheetTrigger>
               <UpdateDataProperty property={property} />
             </Sheet>
@@ -154,7 +156,7 @@ export const columns: ColumnDef<Property>[] = [
                   variant: "ghost",
                 })} w-full`}
               >
-                Precios <EditIcon className="text-sm p-1"/>
+                Precios <EditIcon className="text-sm p-1" />
               </SheetTrigger>
               <UpdatePriceProperty property={property} />
             </Sheet>
@@ -165,13 +167,11 @@ export const columns: ColumnDef<Property>[] = [
                   variant: "ghost",
                 })} w-full`}
               >
-                Imágenes  <EditIcon className="text-sm p-1"/>
+                Imágenes <EditIcon className="text-sm p-1" />
               </SheetTrigger>
               <UpdateImagesProperty property={property} />
             </Sheet>
-            {
-              property.deleted_at && <ButtonRestore property={property} />  
-            }
+            {property.deleted_at && <ButtonRestore property={property} />}
             {/*  <DropdownMenuItem>Añadir imagenes</DropdownMenuItem>
             <DropdownMenuItem>Añadir precios</DropdownMenuItem> */}
             <ButtonDeleteProperty className="mt-1" property={property} />
@@ -200,10 +200,17 @@ export default function DataTableProperties() {
     garage: "",
     paginate: "",
   });
-  const [showDeletesState, setShowDeletesState ] = useState<boolean>(false)
- 
+  const [showDeletesState, setShowDeletesState] = useState<boolean>(false);
+
   const getProperties = async () => {
-    const res = await axios.get("/properties?page=" + page, {params : filters});
+    const res = await axios.get("/properties?page=" + page, {
+      params: filters,
+    });
+    const firstProperty: Property = res.data.properties.data[0];
+    firstProperty.deleted_at != null
+      ? setShowDeletesState(true)
+      : setShowDeletesState(false);
+
     setLoading(false);
     setLinks(res.data.properties.links);
     setProperties(res.data.properties.data);
@@ -260,9 +267,18 @@ export default function DataTableProperties() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <FiltersProperties filters={filters} setFilters={(e : any) => setFilters(e)} showDeletes={true} setShowDeletesState={(e : boolean) => setShowDeletesState(e)} />
+      <FiltersProperties
+        filters={filters}
+        setFilters={(e: any) => setFilters(e)}
+        showDeletes={true}
+      />
 
-      { showDeletesState && <p className="text-xl text-center my-5 "> Mostrando Eliminados </p> }
+      {showDeletesState && (
+        <p className="text-xl text-center my-5 text-red-500 dark:text-red-400 ">
+          {" "}
+          Mostrando Eliminados{" "}
+        </p>
+      )}
       {!loading ? (
         <div className="rounded-md border animate-fade-in">
           <Table>
@@ -322,7 +338,7 @@ export default function DataTableProperties() {
         </div>
       )}
       <div className="flex items-center justify-end space-x-2 py-4">
-        <Pagination setPage={(e : number) => setPage(e)} links={links} />
+        <Pagination setPage={(e: number) => setPage(e)} links={links} />
       </div>
     </div>
   );

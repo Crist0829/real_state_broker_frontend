@@ -1,4 +1,4 @@
-import DataTableProperties from "@/components/admin/DataTableProperites";
+import DataTableProperties from "@/components/properties/DataTableProperites";
 import AuthLayout from "@/layouts/AuthLayout";
 import { useAuthenticate } from "@/store/useAuthenticate";
 

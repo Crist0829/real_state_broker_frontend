@@ -39,14 +39,14 @@ function UpdateDataProperty({ property }: { property: Property }) {
   async function handleSubmit() {
     try {
       const res = await axios.put(`/property/${property.id}`, formData);
-      console.log(res);
-      if (res.status === 200) {
+
+      if (res.status === 200 || res.status === 204) {
         refresh();
         toast.success(`${formData.name} Actualizado correctamente`);
       }
-    } catch (error : any) {
+    } catch (error: any) {
       const errorMsg = getMsgErrorResponse(error);
-      errorMsg && toast.error(errorMsg)
+      errorMsg && toast.error(errorMsg);
     }
   }
 
@@ -195,7 +195,7 @@ function UpdateDataProperty({ property }: { property: Property }) {
                   value,
                 },
               };
-              console.log(e);
+              handleChange(e);
             }}
             defaultValue={formData.status}
           >
@@ -205,11 +205,7 @@ function UpdateDataProperty({ property }: { property: Property }) {
                 placeholder="Elegir estado"
               />
             </SelectTrigger>
-            <SelectContent
-              onChange={(e) => {
-                console.log(e);
-              }}
-            >
+            <SelectContent>
               <SelectGroup>
                 <SelectLabel>Estado</SelectLabel>
                 <SelectItem value="available">Disponible</SelectItem>

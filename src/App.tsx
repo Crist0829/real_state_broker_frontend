@@ -9,7 +9,7 @@ import DashboardPage from "./pages/admin/DashboardPage";
 import { Toaster } from "./components/ui/sonner";
 import Create from "./pages/admin/properties/Create";
 
-import PropertyPage from "./pages/PropertyPage";
+import PropertyPage from "./components/properties/PropertyPage";
 import { useAuthenticate } from "./store/useAuthenticate";
 import { useEffect } from "react";
 import Profile from "./pages/admin/Profile";

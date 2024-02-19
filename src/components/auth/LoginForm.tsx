@@ -17,6 +17,7 @@ import { useAuthenticate } from "@/store/useAuthenticate";
 import { Link, useNavigate } from "react-router-dom";
 import PrincipalLayout from "@/layouts/PrincipalLayout";
 import { toast } from "sonner";
+import { Loader } from "lucide-react";
 
 interface User {
   email: string;
@@ -28,6 +29,8 @@ const LoginForm: React.FC = () => {
 
   const setAuthenticate = useAuthenticate((state) => state.setAuthenticate);
   const isAuthenticated = useAuthenticate((state) => state.isAuthenticated);
+
+  const [loadingLogin, setLoadingLogin] = useState(false);
 
   useEffect(() => {
     isAuthenticated && navigate("/dashboard");
@@ -48,41 +51,40 @@ const LoginForm: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setLoadingLogin(true);
     try {
-      const csrf = () => axios.get("/sanctum/csrf-cookie");
-      await csrf();
+      /* const csrf = () => axios.get("/sanctum/csrf-cookie");
+      await csrf(); */
       const userValidated = loginUserSchema.parse(user);
       const response = await axios.post("/login", userValidated);
-
-      console.log(response);
-
+      localStorage.setItem("token", response.data.token);
       if (response.status === 204 || response.status === 200) {
-        const userAuthenticated = await axios.get("/api/user");
+        const userAuthenticated = await axios.get("/user");
         toast.success("Inicio de sesión correcto");
         setAuthenticate(userAuthenticated.data);
         navigate("/dashboard");
       }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.log(error.response?.data.message);
+        toast.error("Ha ocurrido un error al iniciar sesión");
+      }
+      if (error instanceof ZodError) {
+        const msg = error.issues[0].message;
+        toast.error(msg);
+      }
+    } finally {
+      setLoadingLogin(false);
       setUser({
         email: "",
         password: "",
       });
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        alert(
-          error.response?.data.message ||
-            "Ha ocurrido un error al registrar al usuario"
-        );
-      }
-      if (error instanceof ZodError) {
-        const msg = error.issues[0].message;
-        return alert(msg);
-      }
     }
   };
 
   return (
-    <PrincipalLayout>
-      <Card className="w-[400px] mx-auto dark:bg-zinc-900/30 animate-fade-in">
+    <PrincipalLayout className=" border  flex items-center justify-center">
+      <Card className="max-w-[400px] w-11/12  mx-auto dark:bg-zinc-900/30 animate-fade-in">
         <CardHeader className="flex justify-between flex-row">
           <CardTitle>Inicia Sesión</CardTitle>
         </CardHeader>
@@ -108,7 +110,13 @@ const LoginForm: React.FC = () => {
               />
             </Label>
 
-            <Button>Iniciar sesión</Button>
+            <Button disabled={loadingLogin}>
+              {loadingLogin ? (
+                <Loader className="animate-spin-clockwise animate-iteration-count-infinite" />
+              ) : (
+                "Iniciar sesión"
+              )}
+            </Button>
           </form>
         </CardContent>
         <CardFooter className=" justify-end">

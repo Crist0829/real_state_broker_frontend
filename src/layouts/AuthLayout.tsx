@@ -1,6 +1,6 @@
-import Sidebar from "@/components/auth/Sidebar";
+import Sidebar from "@/components/dashboard/Sidebar";
 import { PropsWithChildren, useEffect } from "react";
-import PrincipalBackground from "@/components/main/PrincipalBackground";
+import PrincipalBackground from "@/components/common/PrincipalBackground";
 import { useNavigate } from "react-router-dom";
 import axios from "@/lib/axiosConfig";
 import { useAuthenticate } from "@/store/useAuthenticate";
@@ -16,7 +16,7 @@ function AuthLayout({ children }: PropsWithChildren) {
   useEffect(() => {
     const checkAuthenticated = async () => {
       try {
-        const res = await axios.get("api/user");
+        const res = await axios.get("/user");
         setAuthenticated(res.data);
         //getProperties();
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

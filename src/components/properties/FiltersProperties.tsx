@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react"
+import {  useEffect, useState } from "react"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import { Button } from "../ui/button"
@@ -6,32 +6,25 @@ import { Search } from "lucide-react"
 import { Badge } from "../ui/badge"
 
 
-const FiltersProperties = ({filters, setFilters, showDeletes, setShowDeletesState} : {filters : any, setFilters : any, showDeletes : boolean, setShowDeletesState : any}) => {
+const FiltersProperties = ({filters, setFilters, showDeletes} : {filters : any, setFilters : any, showDeletes : boolean}) => {
 
-    const [formData, setFormData] = useState({
-        bedrooms : '',
-        bathrooms : '', 
-        livingrooms : '',
-        kitchens : '',
-        floors : '',
+    const [formData, setFormData] = useState<any>({
+        bedrooms : "",
+        bathrooms : "", 
+        livingrooms : "",
+        kitchens : "",
+        floors : "",
         type : '',
-        garage : '',
-        paginate : '',
-        deleted : ''
+        garage : "",
+        paginate :"",
+        deleted : "" 
     })
 
     useEffect(() => setFormData(filters), [filters])
 
-    const onChangeHandle = (e: ChangeEvent<HTMLInputElement>) => {
-      if(e.target.name =='deleted'  && e.target.value == "1"  ){
-        setShowDeletesState(true)
-      }
-
-      if(e.target.name =='deleted'  && e.target.value == "0" || e.target.value == ""  ){
-        setShowDeletesState(false)
-      }
+    const onChangeHandle = (e: any) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({
+        setFormData((prevData : any) => ({
           ...prevData,
           [name]: value,
         }));
@@ -117,7 +110,7 @@ const FiltersProperties = ({filters, setFilters, showDeletes, setShowDeletesStat
                 <select
                   className="dark:text-white bg-gray-200 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
                   name="type"
-                  onChange={() => onChangeHandle}
+                  onChange={onChangeHandle}
                   defaultValue={filters.type}
                 >
                   <option value="">Tipo</option>
@@ -129,7 +122,7 @@ const FiltersProperties = ({filters, setFilters, showDeletes, setShowDeletesStat
             <div className="dark:bg-black">
                 <select
                   className="dark:text-white bg-gray-200 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
-                  onChange={() => onChangeHandle}
+                  onChange={onChangeHandle}
                   defaultValue={formData.garage}
                   name="garage"
                 >
@@ -144,7 +137,7 @@ const FiltersProperties = ({filters, setFilters, showDeletes, setShowDeletesStat
             <div className="dark:bg-gray-800">
                 <select
                   className="dark:text-white bg-gray-200 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
-                  onChange={() => onChangeHandle}
+                  onChange={onChangeHandle}
                   defaultValue={formData.paginate}
                   name="paginate"
                 >
@@ -161,7 +154,7 @@ const FiltersProperties = ({filters, setFilters, showDeletes, setShowDeletesStat
               <div className="dark:bg-gray-800">
                 <select
                   className="dark:text-white bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 outline-none focus:outline-none focus:ring focus:border-blue-300"
-                  onChange={() => onChangeHandle}
+                  onChange={onChangeHandle}
                   defaultValue={formData.garage}
                   name="deleted"
                 >

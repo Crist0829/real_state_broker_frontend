@@ -1,3 +1,5 @@
+import { number } from "zod";
+
 export interface Property {
   id: number;
   name: string;
@@ -20,6 +22,20 @@ export interface Property {
   califications: PropertyCalificationType[];
   user: UserProperty;
 }
+
+export interface FiltersPropertiesType{
+  
+    bedrooms: number
+    bathrooms: number
+    livingrooms: number
+    kitchens: number
+    floors: number
+    type: string
+    garage: boolean
+    paginate: number
+    deleted : boolean
+
+  }
 
 export interface ResponseData {
   current_page: number;
